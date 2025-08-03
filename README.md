@@ -1,0 +1,1 @@
+# Hotel-average-daily-rate
