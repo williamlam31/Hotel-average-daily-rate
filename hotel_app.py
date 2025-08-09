@@ -435,7 +435,6 @@ def show_Price_Prediction(data):
             
             iinput_data = {
                 'arrival_month_numeric': month_mapping[arrival_month],
-                'arrival_date_day_of_month': arrival_day,
                 'stays_in_weekend_nights': weekend_nights,
                 'stays_in_week_nights': week_nights,
                 'adults': adults,
