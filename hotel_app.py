@@ -153,10 +153,14 @@ def load_and_preprocess_data():
     
     # Filter relevant columns for the model input, ensuring they exist
     model_features = [
-        'arrival_month_numeric',
+        'lead_time', 'arrival_date_year', 'arrival_month_numeric',
+        'arrival_date_week_number', 'arrival_date_day_of_month',
         'stays_in_weekend_nights', 'stays_in_week_nights', 'adults',
-        'children', 'babies','total_of_special_requests', 'total_guests', 'total_nights',
-    ]
+        'children', 'babies', 'is_repeated_guest', 'previous_cancellations',
+        'previous_bookings_not_canceled', 'booking_changes',
+        'days_in_waiting_list', 'required_car_parking_spaces',
+        'total_of_special_requests', 'total_guests', 'total_nights',
+        'booking_changes_per_day', 'adr_per_guest']
     
     # Add encoded categorical columns to the feature list
     encoded_cols = [col for col in df_new_encoded.columns if col.startswith(tuple(categorical_columns_final)) and col != 'adr']
@@ -516,17 +520,64 @@ def show_Price_Prediction(data):
             st.error(f"Error making prediction: {str(e)}")
 
 def show_Performance_Dashboard(data):
-    """Display performance dashboard"""
-    st.markdown('<h2 class="sub-header">📈 Performance Dashboard</h2>', unsafe_allow_html=True)
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.markdown('<h2 class="sub-header">📈 Performance Dashboard</h2>', unsafe_allow_html=True)
+    with col2:
+        if st.button("🔄 Update Models", key="update_models_dashboard", help="Retrain models with latest data"):
+            with st.spinner("🤖 Retraining models..."):
+                try:
+                    # Clear existing model state
+                    st.session_state.model_trained = False
+                    st.session_state.model_results = None
+                    st.session_state.best_model = None
+                    st.session_state.best_model_name = None
+                    
+                    # Get fresh data
+                    data_fresh, X_train_data, y_train_data = load_and_preprocess_data()
+                    
+                    # Remove outliers for better training
+                    Q1 = y_train_data.quantile(0.25)
+                    Q3 = y_train_data.quantile(0.75)
+                    IQR = Q3 - Q1
+                    lower_bound = Q1 - 1.5 * IQR
+                    upper_bound = Q3 + 1.5 * IQR
+                    mask = (y_train_data >= lower_bound) & (y_train_data <= upper_bound)
+                    X_clean = X_train_data[mask]
+                    y_clean = y_train_data[mask]
+                    
+                    # Train models
+                    results, X_test, y_test, scaler = train_models(X_clean, y_clean)
+                    
+                    # Update session state
+                    st.session_state.model_results = results
+                    st.session_state.X_test = X_test
+                    st.session_state.y_test = y_test
+                    st.session_state.scaler = scaler
+                    st.session_state.feature_names = X_clean.columns.tolist()
+                    st.session_state.model_trained = True
+                    
+                    # Find best model
+                    best_model_name = min(results.keys(), key=lambda k: results[k]['rmse'])
+                    st.session_state.best_model_name = best_model_name
+                    st.session_state.best_model = results[best_model_name]['model']
+                    st.session_state.use_scaling = results[best_model_name]['use_scaling']
+                    
+                    st.success("✅ Models updated successfully!")
+                    st.experimental_rerun()
+                    
+                except Exception as e:
+                    st.error(f"Error updating models: {str(e)}")
 
     if not st.session_state.model_trained or st.session_state.model_results is None:
         st.warning("⚠️ Please train models first to view performance metrics.")
         return
-    
+
     # Model performance metrics
     st.subheader("Model Performance Summary")
+
     results = st.session_state.model_results
-    
+
     # Create performance comparison chart
     perf_data = []
     for name, result in results.items():
@@ -536,69 +587,79 @@ def show_Performance_Dashboard(data):
             'RMSE': result['rmse'],
             'R²': result['r2']
         })
-    
+
     perf_df = pd.DataFrame(perf_data)
-    
+
     # Performance visualization
     col1, col2 = st.columns(2)
-    
+
     with col1:
         fig_rmse = px.bar(perf_df, x='Model', y='RMSE',
                          title='Root Mean Square Error by Model',
                          color='RMSE', color_continuous_scale='Viridis_r')
         st.plotly_chart(fig_rmse, use_container_width=True)
-    
+
     with col2:
         fig_r2 = px.bar(perf_df, x='Model', y='R²',
                        title='R² Score by Model',
                        color='R²', color_continuous_scale='Viridis')
         st.plotly_chart(fig_r2, use_container_width=True)
-    
+
     # Detailed metrics table
     st.subheader("Detailed Performance Metrics")
     st.dataframe(perf_df.round(4))
-    
+
+    # Best model highlight
+    st.markdown(f'<div class="prediction-box"><strong>🏆 Best Model: {st.session_state.best_model_name}</strong><br>'
+               f'RMSE: {results[st.session_state.best_model_name]["rmse"]:.2f} | '
+               f'R²: {results[st.session_state.best_model_name]["r2"]:.3f}</div>',
+               unsafe_allow_html=True)
+
     # Feature importance (for tree-based models)
     st.subheader("Feature Importance Analysis")
+
     if st.session_state.best_model_name in ['Random Forest', 'Gradient Boosting']:
         # Ensure feature_names are available and match model's feature importances
-        if (st.session_state.feature_names and 
+        if (st.session_state.feature_names and
             hasattr(st.session_state.best_model, 'feature_importances_') and
             len(st.session_state.feature_names) == len(st.session_state.best_model.feature_importances_)):
-            
+
             importance = st.session_state.best_model.feature_importances_
             feature_importance = pd.DataFrame({
                 'Feature': st.session_state.feature_names,
                 'Importance': importance
             }).sort_values('Importance', ascending=False)
-            
+
             fig_importance = px.bar(feature_importance.head(10),
                                   x='Importance', y='Feature',
                                   orientation='h',
                                   title='Top 10 Feature Importance')
             st.plotly_chart(fig_importance, use_container_width=True)
+
         else:
             st.warning("Could not display feature importance. Feature names or importance values mismatch.")
+
     else:
         st.info("Feature importance is available only for tree-based models.")
-    
+
     # Business impact metrics
     st.subheader("Business Impact Analysis")
+
     col1, col2, col3, col4 = st.columns(4)
-    
+
     with col1:
         best_r2 = results[st.session_state.best_model_name]['r2']
         st.metric("Model Accuracy (R²)", f"{best_r2:.3f}")
-    
+
     with col2:
         best_rmse = results[st.session_state.best_model_name]['rmse']
         st.metric("Prediction Error (RMSE)", f"${best_rmse:.2f}")
-    
+
     with col3:
         avg_adr = data['adr'].mean()
         error_percentage = (best_rmse / avg_adr) * 100 if avg_adr > 0 else 0  # Handle division by zero
         st.metric("Error Percentage", f"{error_percentage:.1f}%")
-    
+
     with col4:
         # Estimate potential revenue impact
         # This is a simplified estimation and might need refinement based on business logic
