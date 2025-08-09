@@ -420,7 +420,7 @@ def show_Price_Prediction(data):
             arrival_month = st.selectbox("Arrival Month",
                                        options=['January', 'February', 'March', 'April', 'May', 'June',
                                                'July', 'August', 'September', 'October', 'November', 'December'])
-            total_nights = st.number_input("Total Nights")
+            total_nights = st.number_input("Total Nights", step = None)
         
         with col2:
             total_guests = st.number_input("Total Guests", value = 0)
@@ -442,7 +442,6 @@ def show_Price_Prediction(data):
             input_data = {
                 'lead_time': lead_time,
                 'arrival_month_numeric': month_mapping[arrival_month],
-                'stays_in_weekend_nights': weekend_nights,
                 'stays_in_week_nights': week_nights,
                 'adults': adults,
                 'children': children,
