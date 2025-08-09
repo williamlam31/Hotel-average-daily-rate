@@ -414,12 +414,13 @@ def show_Price_Prediction(data):
     st.markdown('<h2 class="sub-header">💰 Price Prediction</h2>', unsafe_allow_html=True)
     
     st.markdown(
-       "<style>" +
-        ".element-container button.step-up { display: none; } " +
-        ".element-container button.step-down  { display: none; } " +
-        ".element-container div[data-baseweb] { border-radius: 4px; } "
-       "</style>"
-    )
+    "<style>" +
+    ".element-container button.step-up { display: none; } " +
+    ".element-container button.step-down { display: none; } " +
+    ".element-container div[data-baseweb] { border-radius: 4px; } "
+    "</style>",
+    unsafe_allow_html=True
+
     
     st.write("Enter booking details to get an ADR prediction:")
     
