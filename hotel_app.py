@@ -343,11 +343,65 @@ def show_Home(data):
     
     ### 🔍 Page Breakdown
     
+    - **Data Exploration**: Key insights from analysis
     - **Price Prediction**: Average Daily Rate estimate
     - **Performance Dashboard**: Key metrics and visualiztions
-    - **Data Exploration**: Key insights from analysis
     """)
- 
+def show_data_exploration(data):
+    """Display data exploration page"""
+    st.markdown('<h2 class="sub-header">📊 Data Exploration</h2>', unsafe_allow_html=True)
+    
+    # Dataset overview
+    st.subheader("Dataset Overview")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("**Dataset Shape:**", data.shape)
+        st.write("**Features:**", data.shape[1])
+        st.write("**Records:**", data.shape[0])
+    
+    with col2:
+        missing_data = data.isnull().sum().sum()
+        st.write("**Missing Values:**", missing_data)
+        st.write("**Data Types:**", len(data.dtypes.unique()))
+        st.write("**Memory Usage:**", f"{data.memory_usage().sum() / 1024**2:.2f} MB")
+    
+    # ADR Distribution
+    st.subheader("Average Daily Rate (ADR) Distribution")
+    fig_adr = px.histogram(data, x='adr', nbins=50, title='ADR Distribution')
+    st.plotly_chart(fig_adr, use_container_width=True)
+    
+    # ADR by Hotel Type
+    st.subheader("ADR Analysis by Hotel Type")
+    fig_hotel = px.box(data, x='hotel', y='adr', title='ADR by Hotel Type')
+    st.plotly_chart(fig_hotel, use_container_width=True)
+    
+    # Correlation heatmap
+    st.subheader("Feature Correlations")
+    numeric_cols = data.select_dtypes(include=[np.number]).columns
+    corr_matrix = data[numeric_cols].corr()
+    fig_corr = px.imshow(corr_matrix,
+                        title='Correlation Matrix',
+                        color_continuous_scale='RdBu_r',
+                        aspect='auto')
+    st.plotly_chart(fig_corr, use_container_width=True)
+    
+    # Key insights
+    st.subheader("Key Insights")
+    avg_adr = data['adr'].mean()
+    resort_adr = data[data['hotel'] == 'Resort Hotel']['adr'].mean()
+    city_adr = data[data['hotel'] == 'City Hotel']['adr'].mean()
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("Overall Avg ADR", f"${avg_adr:.2f}")
+    
+    with col2:
+        st.metric("Resort Hotel ADR", f"${resort_adr:.2f}")
+    
+    with col3:
+        st.metric("City Hotel ADR", f"${city_adr:.2f}") 
 
 def show_Price_Prediction(data):
     """Display prediction page"""
@@ -589,61 +643,7 @@ def show_Performance_Dashboard(data):
         potential_improvement = best_r2 * avg_adr * 0.05 if avg_adr > 0 else 0  # Assume 5% improvement potential
         st.metric("Revenue Optimization (Est.)", f"${potential_improvement:.2f}")
 
-def show_data_exploration(data):
-    """Display data exploration page"""
-    st.markdown('<h2 class="sub-header">📊 Data Exploration</h2>', unsafe_allow_html=True)
-    
-    # Dataset overview
-    st.subheader("Dataset Overview")
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.write("**Dataset Shape:**", data.shape)
-        st.write("**Features:**", data.shape[1])
-        st.write("**Records:**", data.shape[0])
-    
-    with col2:
-        missing_data = data.isnull().sum().sum()
-        st.write("**Missing Values:**", missing_data)
-        st.write("**Data Types:**", len(data.dtypes.unique()))
-        st.write("**Memory Usage:**", f"{data.memory_usage().sum() / 1024**2:.2f} MB")
-    
-    # ADR Distribution
-    st.subheader("Average Daily Rate (ADR) Distribution")
-    fig_adr = px.histogram(data, x='adr', nbins=50, title='ADR Distribution')
-    st.plotly_chart(fig_adr, use_container_width=True)
-    
-    # ADR by Hotel Type
-    st.subheader("ADR Analysis by Hotel Type")
-    fig_hotel = px.box(data, x='hotel', y='adr', title='ADR by Hotel Type')
-    st.plotly_chart(fig_hotel, use_container_width=True)
-    
-    # Correlation heatmap
-    st.subheader("Feature Correlations")
-    numeric_cols = data.select_dtypes(include=[np.number]).columns
-    corr_matrix = data[numeric_cols].corr()
-    fig_corr = px.imshow(corr_matrix,
-                        title='Correlation Matrix',
-                        color_continuous_scale='RdBu_r',
-                        aspect='auto')
-    st.plotly_chart(fig_corr, use_container_width=True)
-    
-    # Key insights
-    st.subheader("Key Insights")
-    avg_adr = data['adr'].mean()
-    resort_adr = data[data['hotel'] == 'Resort Hotel']['adr'].mean()
-    city_adr = data[data['hotel'] == 'City Hotel']['adr'].mean()
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric("Overall Avg ADR", f"${avg_adr:.2f}")
-    
-    with col2:
-        st.metric("Resort Hotel ADR", f"${resort_adr:.2f}")
-    
-    with col3:
-        st.metric("City Hotel ADR", f"${city_adr:.2f}")
+
 
 # Run the main function
 if __name__ == "__main__":
