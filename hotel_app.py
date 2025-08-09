@@ -443,9 +443,6 @@ def show_Price_Prediction(data):
                 'total_nights': total_nights,
                 'days_in_waiting_list': days_waiting,
             }
-            # Add derived features to input_data
-            input_data['booking_changes_per_day'] = input_data['booking_changes'] / (input_data['lead_time'] + 1)
-            input_data['adr_per_guest'] = 0 if input_data['total_guests'] == 0 else 100 / input_data['total_guests']  # Handle zero guests
             
             # Add encoded categorical features
             categorical_cols_to_encode = {
