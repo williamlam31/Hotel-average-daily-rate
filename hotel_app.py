@@ -443,28 +443,7 @@ def show_Price_Prediction(data):
                 'total_nights': total_nights,
                 'days_in_waiting_list': days_waiting,
             }
-            
-            # Add encoded categorical features
-            categorical_cols_to_encode = {
-                'hotel': hotel,
-                'meal': meal,
-                'country': 'Unknown',  # Country is complex to add as a single input, using 'Unknown' as placeholder
-                'market_segment': market_segment,
-                'distribution_channel': distribution_channel,
-                'reserved_room_type': reserved_room_type,
-                'assigned_room_type': assigned_room_type,
-                'deposit_type': deposit_type,
-                'customer_type': customer_type,
-                'arrival_season': get_season(input_data['arrival_month_numeric']),
-                'arrival_date_month': arrival_month,
-                'reservation_status': reservation_status
-            }
-            
-            # One-hot encode the input categorical features based on the training data's columns
-            input_df_encoded = pd.DataFrame([input_data])
-            for col, value in categorical_cols_to_encode.items():
-                if f'{col}_{value}' in st.session_state.feature_names:
-                    input_df_encoded[f'{col}_{value}'] = 1
+        
             
             # Prepare input data using the helper function
             input_prepared = prepare_input_features(input_df_encoded.iloc[0].to_dict(),
