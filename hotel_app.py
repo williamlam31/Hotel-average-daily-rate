@@ -26,49 +26,64 @@ st.set_page_config(
 st.markdown("""
 <style>
 .main-header {
-    font-size: 3rem;
-    color: #1f4e79;
-    text-align: center;
-    margin-bottom: 2rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+font-size: 3rem;
+color: #1f4e79;
+text-align: center;
+margin-bottom: 2rem;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 .sub-header {
-    font-size: 1.5rem;
-    color: #2c5aa0;
-    margin-bottom: 1rem;
+font-size: 1.5rem;
+color: #2c5aa0;
+margin-bottom: 1rem;
 }
 .metric-card {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #dee2e6;
-    margin: 0.5rem 0;
+background-color: #f8f9fa;
+padding: 1rem;
+border-radius: 0.5rem;
+border: 1px solid #dee2e6;
+margin: 0.5rem 0;
 }
 .prediction-box {
-    background-color: #e3f2fd;
-    padding: 2rem;
-    border-radius: 1rem;
-    border-left: 5px solid #2196f3;
-    margin: 1rem 0;
+background-color: #e3f2fd;
+padding: 2rem;
+border-radius: 1rem;
+border-left: 5px solid #2196f3;
+margin: 1rem 0;
 }
 .warning-box {
-    background-color: #fff3cd;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    border-left: 5px solid #ffc107;
-    margin: 1rem 0;
+background-color: #fff3cd;
+padding: 1rem;
+border-radius: 0.5rem;
+border-left: 5px solid #ffc107;
+margin: 1rem 0;
 }
 .stButton > button {
-    background-color: #2196f3;
-    color: white;
-    border-radius: 0.5rem;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-weight: bold;
+background-color: #2196f3;
+color: white;
+border-radius: 0.5rem;
+border: none;
+padding: 0.5rem 1rem;
+font-weight: bold;
 }
 .stButton > button:hover {
-    background-color: #1976d2;
-    transition: background-color 0.3s;
+background-color: #1976d2;
+transition: background-color 0.3s;
+}
+
+/* Left align sidebar content */
+section[data-testid="stSidebar"] {
+    text-align: left;
+}
+
+section[data-testid="stSidebar"] .stButton > button {
+    text-align: left;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+section[data-testid="stSidebar"] h1 {
+    text-align: left;
 }
 </style>
 """, unsafe_allow_html=True)
