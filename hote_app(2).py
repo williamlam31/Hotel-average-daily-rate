@@ -260,6 +260,7 @@ def main():
         st.Page("Home.py", title="Home"),
         st.Page("Price Prediction.py", title="Prediction")
         st.Page("Performance Dasboard.py", title="Performance Dashboard")
+    }
     pg = st.navigation(pages)
     pg.run()
     # Load data
@@ -519,17 +520,6 @@ def show_prediction_page(data):
                 'arrival_month_numeric': month_mapping[arrival_month],
                 'arrival_date_week_number': arrival_week,
                 'arrival_date_day_of_month': arrival_day,
-                'stays_in_weekend_nights': weekend_nights,
-                'stays_in_week_nights': week_nights,
-                'adults': adults,
-                'children': children,
-                'babies': babies,
-                'is_repeated_guest': is_repeated_guest,
-                'previous_cancellations': previous_cancellations,
-                'previous_bookings_not_canceled': previous_bookings,
-                'booking_changes': booking_changes,
-                'days_in_waiting_list': days_waiting,
-                'required_car_parking_spaces': parking_spaces,
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
                 'total_nights': weekend_nights + week_nights,
