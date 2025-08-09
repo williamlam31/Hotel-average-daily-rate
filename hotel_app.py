@@ -445,10 +445,6 @@ def show_Price_Prediction(data):
             }
         
             
-            # Make prediction
-            model = st.session_state.best_model
-            prediction = model.predict(input_prepared)[0]
-            
             # Display prediction
             st.markdown(f"""
             <div class="prediction-box">
