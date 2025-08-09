@@ -413,6 +413,13 @@ def show_data_exploration(data):
 def show_Price_Prediction(data):
     """Display prediction page"""
     st.markdown('<h2 class="sub-header">💰 Price Prediction</h2>', unsafe_allow_html=True)
+
+    if st.button("🔄 Refresh Page"):
+        st.rerun()
+    
+    if not st.session_state.model_trained:
+        st.warning("⚠️ Please train models first in the 'Model Training' section.")
+        return
     
     st.write("Enter booking details to get an ADR prediction:")
     
@@ -456,6 +463,7 @@ def show_Price_Prediction(data):
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
                 'total_nights': weekend_nights + week_nights,
+                'adults': adults
             }
             
             # Add derived features to input_data
