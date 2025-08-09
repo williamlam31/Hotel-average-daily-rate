@@ -153,14 +153,8 @@ def load_and_preprocess_data():
     
     # Filter relevant columns for the model input, ensuring they exist
     model_features = [
-        'lead_time', 'arrival_date_year', 'arrival_month_numeric',
-        'arrival_date_week_number', 'arrival_date_day_of_month',
-        'stays_in_weekend_nights', 'stays_in_week_nights', 'adults',
-        'children', 'babies', 'is_repeated_guest', 'previous_cancellations',
-        'previous_bookings_not_canceled', 'booking_changes',
-        'days_in_waiting_list', 'required_car_parking_spaces',
-        'total_of_special_requests', 'total_guests', 'total_nights',
-        'booking_changes_per_day', 'adr_per_guest']
+        'lead_time', 'arrival_month_numeric',
+        'days_in_waiting_list', 'total_of_special_requests', 'total_guests', 'total_nights]
     
     # Add encoded categorical columns to the feature list
     encoded_cols = [col for col in df_new_encoded.columns if col.startswith(tuple(categorical_columns_final)) and col != 'adr']
@@ -453,6 +447,7 @@ def show_Price_Prediction(data):
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
                 'total_nights': weekend_nights + week_nights,
+                'days_in_waiting_list': days_waiting,
             }
             # Add derived features to input_data
             input_data['booking_changes_per_day'] = input_data['booking_changes'] / (input_data['lead_time'] + 1)
