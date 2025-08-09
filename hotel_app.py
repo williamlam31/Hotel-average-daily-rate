@@ -157,7 +157,7 @@ def load_and_preprocess_data():
         'days_in_waiting_list', 'total_of_special_requests', 'total_guests', 'total_nights']
     
    
-    X = df_new_encoded[existing_model_features]
+    X = df_new[model_features]
     y = df_new_encoded['adr']
     
     return df_new, X, y  # Return original df_new for data exploration, and X, y for training
