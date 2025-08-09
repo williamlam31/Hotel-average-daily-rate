@@ -421,16 +421,23 @@ def show_Price_Prediction(data):
         
         with col1:
             hotel = st.selectbox("Hotel Type", options=['Resort Hotel', 'City Hotel'])
-            lead_time = st.number_input("Lead Time (days)", value = 0)
+            lead_time = st.number_input("Lead Time (days)", min_value=0, max_value=500, value=50)
+            arrival_year = st.number_input("Arrival Year", min_value=2015, max_value=2025, value=2024)
             arrival_month = st.selectbox("Arrival Month",
                                        options=['January', 'February', 'March', 'April', 'May', 'June',
-                                               'July', 'August', 'September', 'October', 'November', 'December'])        
+                                               'July', 'August', 'September', 'October', 'November', 'December'])
+            arrival_week = st.number_input("Week Number", min_value=1, max_value=53, value=26)
+        
         with col2:
-            total_nights = st.number_input("Total Nights", value = 0)
-            total_guests = st.number_input("Total Guests", value = 0)
-            special_requests = st.text_input("Special Requests", value="0")
+            arrival_day = st.number_input("Day of Month", min_value=1, max_value=31, value=15)
+            weekend_nights = st.number_input("Weekend Nights", min_value=0, max_value=10, value=1)
+            week_nights = st.number_input("Week Nights", min_value=0, max_value=20, value=2)
+            adults = st.number_input("Adults", min_value=0, max_value=10, value=2)
+            children = st.number_input("Children", min_value=0, max_value=5, value=0)
         
         with col3:
+            babies = st.number_input("Babies", min_value=0, max_value=3, value=0)
+            meal = st.selectbox("Meal Plan", options=['BB', 'FB', 'HB', 'SC', 'Undefined'])
             market_segment = st.selectbox("Market Segment",
                                         options=['Direct', 'Corporate', 'Online TA', 'Offline TA/TO',
                                                 'Complementary', 'Groups', 'Aviation'])
@@ -438,6 +445,7 @@ def show_Price_Prediction(data):
                                                options=['Direct', 'Corporate', 'TA/TO', 'Undefined', 'GDS'])
             customer_type = st.selectbox("Customer Type",
                                        options=['Transient', 'Contract', 'Transient-Party', 'Group'])
+  
         
         submit_button = st.form_submit_button("🔮 Predict ADR")
     
@@ -449,13 +457,26 @@ def show_Price_Prediction(data):
                 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
             }
             
-            input_data = {
+            iinput_data = {
                 'lead_time': lead_time,
+                'arrival_date_year': arrival_year,
                 'arrival_month_numeric': month_mapping[arrival_month],
+                'arrival_date_week_number': arrival_week,
+                'arrival_date_day_of_month': arrival_day,
+                'stays_in_weekend_nights': weekend_nights,
+                'stays_in_week_nights': week_nights,
+                'adults': adults,
+                'children': children,
+                'babies': babies,
+                'is_repeated_guest': is_repeated_guest,
+                'previous_cancellations': previous_cancellations,
+                'previous_bookings_not_canceled': previous_bookings,
+                'booking_changes': booking_changes,
+                'days_in_waiting_list': days_waiting,
+                'required_car_parking_spaces': parking_spaces,
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
                 'total_nights': weekend_nights + week_nights,
-                'adults': adults
             }
             
             # Add derived features to input_data
