@@ -267,6 +267,11 @@ def initialize_session_state():
     for var, default_value in session_vars.items():
         if var not in st.session_state:
             st.session_state[var] = default_value
+
+    if 'last_data_refresh' not in st.session_state:
+    st.session_state.last_data_refresh = datetime.now()
+    if 'data_refresh_interval' not in st.session_state:
+    st.session_state.data_refresh_interval = 600
     
     # Sidebar with direct navigation buttons
     st.sidebar.title("Navigation")
