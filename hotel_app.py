@@ -452,7 +452,6 @@ def show_Price_Prediction(data):
             
             input_data = {
                 'lead_time': lead_time,
-                'arrival_date_year': arrival_year,
                 'arrival_month_numeric': month_mapping[arrival_month],
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
