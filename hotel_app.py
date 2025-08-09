@@ -426,14 +426,13 @@ def show_Price_Prediction(data):
         with col1:
             hotel = st.selectbox("Hotel Type", options=['Resort Hotel', 'City Hotel'])
             lead_time = st.number_input("Lead Time (days)", min_value=0, max_value=500, value=50)
-            special_requests = st.text_input("Special Requests", value="0", placeholder="Enter number (0-10)")
             arrival_month = st.selectbox("Arrival Month",
                                        options=['January', 'February', 'March', 'April', 'May', 'June',
                                                'July', 'August', 'September', 'October', 'November', 'December'])        
         with col2:
-            weekend_nights = st.number_input("Weekend Nights", min_value=0, max_value=10, value=1)
-            total_nights = st.number_input("Total Nights", min_value=0)
-            total_guests = st.number_input("Adults", value =0)
+            total_nights = st.number_input("Total Nights", value = "0")
+            total_guests = st.number_input("Total Guests", value = "0")
+            special_requests = st.text_input("Special Requests", value="0")
         
         with col3:
             market_segment = st.selectbox("Market Segment",
