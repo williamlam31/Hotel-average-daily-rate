@@ -253,6 +253,28 @@ def main():
     # Header
     st.markdown('<h1 class="main-header">🏨 Hotel Revenue Optimizer</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">AI-Powered Average Daily Rate (ADR) Prediction System</p>', unsafe_allow_html=True)
+
+    initialize_session_state()
+    
+def initialize_session_state():
+    """Initialize all session state variables"""
+    session_vars = {
+        'model_trained': False,
+        'model': None,
+        'scaler': None,
+        'feature_names': None,
+        'model_results': None,
+        'best_model_name': None,
+        'best_model': None,
+        'use_scaling': None,
+        'X_test': None,
+        'y_test': None,
+        'current_page': "🏠 Home"
+    }
+    
+    for var, default_value in session_vars.items():
+        if var not in st.session_state:
+            st.session_state[var] = default_value
     
     # Sidebar with direct navigation buttons
     st.sidebar.title("Navigation")
