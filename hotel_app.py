@@ -439,7 +439,7 @@ def show_Price_Prediction(data):
                 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
             }
             
-           input_data = {
+    input_data = {
                 'lead_time': lead_time,
                 'arrival_date_year': arrival_year,
                 'arrival_month_numeric': month_mapping[arrival_month],
