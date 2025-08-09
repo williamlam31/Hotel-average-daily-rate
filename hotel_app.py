@@ -112,12 +112,12 @@ def load_and_preprocess_data():
     # Handle missing values
     df_new['children'].fillna(0, inplace=True)
     df_new['country'].fillna('Unknown', inplace=True)
-    df_new['agent'].fillna(0, inplace=True)
-    df_new['company'].fillna(0, inplace=True)
-    df_new['adr'].fillna(df_new['adr'].median(), inplace=True)  # Fill missing ADR with median
-    
-    # Remove rows with zero adults, children, and babies
-    df_new = df_new[(df_new['adults'] > 0) | (df_new['children'] > 0) | (df_new['babies'] > 0)]
+
+    # Remove rows columns with null values
+    df_new.drop_duplicates(inplace = True)
+    df_new.drop(['agent', 'company'], axis=1, inplace=True)
+    df_new['reservation_status_date'] = df_new['reservation_status_date'].astype(str)
+    df_new.drop_duplicates(inplace = True)
     
     # Create derived features
     df_new['total_nights'] = df_new['stays_in_weekend_nights'] + df_new['stays_in_week_nights']
