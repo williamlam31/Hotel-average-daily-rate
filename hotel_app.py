@@ -443,7 +443,8 @@ def show_Price_Prediction(data):
                 'total_nights': total_nights,
                 'days_in_waiting_list': days_waiting,
             }
-        
+            
+            model = st.session_state.best_model
             prediction = model.predict(input_prepared)[0]
             
             # Display prediction
