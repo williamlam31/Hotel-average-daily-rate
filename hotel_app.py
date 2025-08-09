@@ -457,8 +457,6 @@ def show_Price_Prediction(data):
                 'lead_time': lead_time,
                 'arrival_date_year': arrival_year,
                 'arrival_month_numeric': month_mapping[arrival_month],
-                'arrival_date_week_number': arrival_week,
-                'arrival_date_day_of_month': arrival_day,
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
                 'total_nights': weekend_nights + week_nights,
