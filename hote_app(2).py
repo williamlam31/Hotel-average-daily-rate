@@ -274,13 +274,13 @@ def main():
     
     # Page routing
     if page == "🏠 Home":
-        show_home_page(data)
+        show_home(data)
     elif page == "📊 Data Exploration":
         show_data_exploration(data)
     elif page == "🤖 Model Training":
         show_model_training(X_train_data, y_train_data)
     elif page == "💰 Price Prediction":
-        show_prediction_page(data)  # Pass data for insights
+        show_price_prediction(data)  # Pass data for insights
     elif page == "📈 Performance Dashboard":
         show_performance_dashboard(data)  # Pass data for insights
 
