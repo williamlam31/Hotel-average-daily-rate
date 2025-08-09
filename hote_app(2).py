@@ -460,7 +460,7 @@ def show_model_training(X, y):
     if st.session_state.model_trained:
         st.success("Models are ready! Go to 'Price Prediction' to make forecasts.")
 
-def show_prediction_page(data):
+def show_Price_Prediction(data):
     """Display prediction page"""
     st.markdown('<h2 class="sub-header">💰 Price Prediction</h2>', unsafe_allow_html=True)
     
