@@ -1,0 +1,9 @@
+pandas
+streamlit
+kaggle
+google
+seaborn
+matplotlib>=3.0.0
+plotly
+sklearn
+joblib
