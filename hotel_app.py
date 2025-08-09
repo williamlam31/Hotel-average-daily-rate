@@ -435,7 +435,6 @@ def show_Price_Prediction(data):
             
             iinput_data = {
                 'arrival_month_numeric': month_mapping[arrival_month],
-                'arrival_date_week_number': arrival_week,
                 'arrival_date_day_of_month': arrival_day,
                 'stays_in_weekend_nights': weekend_nights,
                 'stays_in_week_nights': week_nights,
@@ -522,6 +521,10 @@ def show_Price_Prediction(data):
 def show_Performance_Dashboard(data):
     """Display performance dashboard"""
     st.markdown('<h2 class="sub-header">📈 Performance Dashboard</h2>', unsafe_allow_html=True)
+
+    if not st.session_state.model_trained or st.session_state.model_results is None:
+        st.warning("⚠️ Please train models first to view performance metrics.")
+        return
     
     # Model performance metrics
     st.subheader("Model Performance Summary")
