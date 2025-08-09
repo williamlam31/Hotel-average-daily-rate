@@ -16,7 +16,7 @@ warnings.filterwarnings('ignore')
 
 # Page configuration
 st.set_page_config(
-    page_title="Hotel Revenue Optimizer",
+    page_title="Hotel Average Daily Rate Estimator",
     page_icon="🏨",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -318,7 +318,6 @@ def initialize_session_state():
 
 def show_Home(data):
     """Display the home page"""
-    st.markdown('<h2 class="sub-header">Welcome to Hotel Revenue Optimizer</h2>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
@@ -330,28 +329,25 @@ def show_Home(data):
         st.metric("Average Daily Rate", f"${avg_adr:.2f}")
     
     with col3:
-        if 'is_canceled' in data.columns:
-            cancellation_rate = data['is_canceled'].mean() * 100
+        if 'total_guests' in data.columns:
+            total_guests = data['total_guests'].sum()
         else:
-            cancellation_rate = 15.0  # Default value for sample data
-        st.metric("Cancellation Rate", f"{cancellation_rate:.1f}%")
+            total_guests = (data['adults'] + data['children'] + data['babies']).sum()
+        st.metric("Total Guests", f"{total_guests:,}")
     
     st.markdown("""
     ### 🎯 Business Problem
     
-    This AI agent helps hotels optimize their pricing strategy by predicting the Average Daily Rate (ADR)
-    based on various booking characteristics and market conditions. By accurately forecasting room rates,
-    hotels can maximize revenue while maintaining competitive pricing.
+    Hotel prices are dyanmic and influenced by factors such as lead time and seasonality. Since the hospitality industry is very competitive, this AI tool is 
+    to assist the hotel in determining an optimal that will attract guests and improve their financial outlook.
     
-    ### 🔍 Key Features
+    ### 🔍 Page Breakdown
     
-    - **Real-time Price Prediction**: Get instant ADR predictions for new bookings
-    - **Multiple ML Models**: Compare performance across different algorithms  
-    - **Interactive Dashboard**: Explore data insights and model performance
-    - **Business Intelligence**: Make data-driven pricing decisions
-    """)
+    - **Price Prediction**: Input booking information and ADR will be estimated 
+    - **Performance Dashboard**: Key Metrics and Visualiztions
+    - **Data Exploration**: Key Insights from the analysis
+ 
     
-    st.markdown('<div class="warning-box">💡 <strong>Getting Started:</strong> Navigate to "Model Training" to train your AI models, then use "Price Prediction" for real-time forecasts!</div>', unsafe_allow_html=True)
 
 def show_data_exploration(data):
     """Display data exploration page"""
