@@ -274,17 +274,17 @@ def main():
     
     # Page routing
     if page == "🏠 Home":
-        show_home(data)
+        show_Home(data)
     elif page == "📊 Data Exploration":
         show_data_exploration(data)
     elif page == "🤖 Model Training":
         show_model_training(X_train_data, y_train_data)
     elif page == "💰 Price Prediction":
-        show_price_prediction(data)  # Pass data for insights
+        show_Price_Prediction(data)  # Pass data for insights
     elif page == "📈 Performance Dashboard":
-        show_performance_dashboard(data)  # Pass data for insights
+        show_Performance_Dashboard(data)  # Pass data for insights
 
-def show_home_page(data):
+def show_Home(data):
     """Display the home page"""
     st.markdown('<h2 class="sub-header">Welcome to Hotel Revenue Optimizer</h2>', unsafe_allow_html=True)
     
