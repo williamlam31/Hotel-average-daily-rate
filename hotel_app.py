@@ -249,11 +249,6 @@ def main():
 
     initialize_session_state()
     
-    if 'last_data_refresh' not in st.session_state:
-        st.session_state.last_data_refresh = datetime.now()
-    if 'data_refresh_interval' not in st.session_state:
-        st.session_state.data_refresh_interval = 600
-    
 def initialize_session_state():
     """Initialize all session state variables"""
     session_vars = {
