@@ -308,7 +308,7 @@ def initialize_session_state():
     # Page routing (rest remains the same)
     if page == "🏠 Home":
         show_Home(data)
-     elif page == "💰 Price Prediction":
+    elif page == "💰 Price Prediction":
         show_Price_Prediction(data)
     elif page == "📊 Data Exploration":
         show_data_exploration(data)
@@ -364,7 +364,6 @@ def show_data_exploration(data):
         missing_data = data.isnull().sum().sum()
         st.write("**Missing Values:**", missing_data)
         st.write("**Data Types:**", len(data.dtypes.unique()))
-        st.write("**Memory Usage:**", f"{data.memory_usage().sum() / 1024**2:.2f} MB")
     
     # ADR Distribution
     st.subheader("Average Daily Rate (ADR) Distribution")
