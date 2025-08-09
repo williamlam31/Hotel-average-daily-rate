@@ -249,54 +249,54 @@ def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=F
         return input_scaled
     else:
         return input_df
-
 def main():
     # Header
     st.markdown('<h1 class="main-header">🏨 Hotel Revenue Optimizer</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">AI-Powered Average Daily Rate (ADR) Prediction System</p>', unsafe_allow_html=True)
     
-    # Sidebar
+    # Sidebar with direct navigation buttons
     st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Choose a page",
-                               ["🏠 Home", "📊 Data Exploration", "🤖 Model Training", "💰 Price Prediction", "📈 Performance Dashboard"])
     
-    # Load data only once
+    # Initialize page in session state if not exists
+    if 'current_page' not in st.session_state:
+        st.session_state.current_page = "🏠 Home"
+    
+    # Navigation buttons
+    if st.sidebar.button("🏠 Home", use_container_width=True):
+        st.session_state.current_page = "🏠 Home"
+    
+    if st.sidebar.button("📊 Data Exploration", use_container_width=True):
+        st.session_state.current_page = "📊 Data Exploration"
+    
+    if st.sidebar.button("🤖 Model Training", use_container_width=True):
+        st.session_state.current_page = "🤖 Model Training"
+    
+    if st.sidebar.button("💰 Price Prediction", use_container_width=True):
+        st.session_state.current_page = "💰 Price Prediction"
+    
+    if st.sidebar.button("📈 Performance Dashboard", use_container_width=True):
+        st.session_state.current_page = "📈 Performance Dashboard"
+    
+    # Get the current page
+    page = st.session_state.current_page
+    
+    # Load data
     data, X_train_data, y_train_data = load_and_preprocess_data()
     
     if data is None or X_train_data is None or y_train_data is None:
         st.error("Error loading or preprocessing data. Please check the data source and code.")
         return
     
-    # Page routing - each page will be completely separate
+    # Page routing (rest remains the same)
     if page == "🏠 Home":
-        # Clear sidebar content for this page if needed
-        st.sidebar.empty()
         show_Home(data)
-    
     elif page == "📊 Data Exploration":
-        # Add page-specific sidebar content if needed
-        st.sidebar.markdown("---")
-        st.sidebar.markdown("### Data Filters")
-        # You can add filters here for the data exploration page
         show_data_exploration(data)
-    
     elif page == "🤖 Model Training":
-        st.sidebar.markdown("---")
-        st.sidebar.markdown("### Training Options")
-        # Add training-specific options here
         show_model_training(X_train_data, y_train_data)
-    
     elif page == "💰 Price Prediction":
-        st.sidebar.markdown("---")
-        st.sidebar.markdown("### Quick Actions")
-        if st.sidebar.button("Reset Form"):
-            st.experimental_rerun()
-        show_Prediction_Page(data)
-    
+        show_Price_Prediction(data)
     elif page == "📈 Performance Dashboard":
-        st.sidebar.markdown("---")
-        st.sidebar.markdown("### Dashboard Options")
-        # Add dashboard-specific options here
         show_Performance_Dashboard(data)
     
 
