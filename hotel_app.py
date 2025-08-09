@@ -444,6 +444,7 @@ def show_Price_Prediction(data):
                 'days_in_waiting_list': days_waiting,
             }
         
+            prediction = model.predict(input_prepared)[0]
             
             # Display prediction
             st.markdown(f"""
