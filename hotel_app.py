@@ -416,7 +416,7 @@ def show_Price_Prediction(data):
         ".element-container button.step-down  { display: none; } " +
         ".element-container div[data-baseweb] { border-radius: 4px; } "
        "</style>"
-)
+    )
     
     st.write("Enter booking details to get an ADR prediction:")
     
@@ -434,8 +434,8 @@ def show_Price_Prediction(data):
             total_guests = st.number_input("Total Guests", value = 0)
         
         with col3:
-            special_requests = st.number_input("Special Requests", value = 0)
-            lead_time = st.number_input("Lead Time (days)", value = 0)
+            totat_of_special_requests = st.number_input("Special Requests", value = 0)
+            lead_time = st.number_input("Lead Time", value = 0)
         
         submit_button = st.form_submit_button("🔮 Predict ADR")
     
@@ -450,14 +450,6 @@ def show_Price_Prediction(data):
             input_data = {
                 'lead_time': lead_time,
                 'arrival_month_numeric': month_mapping[arrival_month],
-                'children': children,
-                'babies': babies,
-                'is_repeated_guest': is_repeated_guest,
-                'previous_cancellations': previous_cancellations,
-                'previous_bookings_not_canceled': previous_bookings,
-                'booking_changes': booking_changes,
-                'days_in_waiting_list': days_waiting,
-                'required_car_parking_spaces': parking_spaces,
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
                 'total_nights': weekend_nights + week_nights,
