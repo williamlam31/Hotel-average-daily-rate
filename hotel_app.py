@@ -472,7 +472,7 @@ def show_Price_Prediction(data):
             <div class="prediction-box">
                 <h3>Predicted Average Daily Rate</h3>
                 <h2 style="color: #000000; font-size: 3rem;">${prediction:.2f}</h2>
-                <p>Model: {st.session_state.best_model_name}</p>
+                <p style="color: #000000;">Model: {st.session_state.best_model_name}</p>
                 <p>Confidence: Based on historical patterns and current market conditions</p>
             </div>
             """, unsafe_allow_html=True)
