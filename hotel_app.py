@@ -420,12 +420,14 @@ def show_Price_Prediction(data):
             arrival_month = st.selectbox("Arrival Month",
                                        options=['January', 'February', 'March', 'April', 'May', 'June',
                                                'July', 'August', 'September', 'October', 'November', 'December'])
+            total_nights = st.number_input("Total Nights", value = 0)
         
         with col2:
             total_guests = st.number_input("Total Guests", value = 0)
         
         with col3:
-              total_nights = st.number_input("Total Nights", value = 0)
+            special_requests = st.number_input("Special Requests", value = 0)
+            lead_time = st.number_input("Lead Time (days)", value = 0)
         
         submit_button = st.form_submit_button("🔮 Predict ADR")
     
@@ -437,7 +439,7 @@ def show_Price_Prediction(data):
                 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
             }
             
-       input_data = {
+           input_data = {
                 'lead_time': lead_time,
                 'arrival_date_year': arrival_year,
                 'arrival_month_numeric': month_mapping[arrival_month],
