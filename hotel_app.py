@@ -154,7 +154,7 @@ def load_and_preprocess_data():
     # Filter relevant columns for the model input, ensuring they exist
     model_features = [
         'lead_time', 'arrival_month_numeric',
-        'days_in_waiting_list', 'total_of_special_requests', 'total_guests', 'total_nights]
+        'days_in_waiting_list', 'total_of_special_requests', 'total_guests', 'total_nights']
     
     # Add encoded categorical columns to the feature list
     encoded_cols = [col for col in df_new_encoded.columns if col.startswith(tuple(categorical_columns_final)) and col != 'adr']
