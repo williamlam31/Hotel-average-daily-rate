@@ -308,10 +308,10 @@ def initialize_session_state():
     # Page routing (rest remains the same)
     if page == "🏠 Home":
         show_Home(data)
+     elif page == "💰 Price Prediction":
+        show_Price_Prediction(data)
     elif page == "📊 Data Exploration":
         show_data_exploration(data)
-    elif page == "💰 Price Prediction":
-        show_Price_Prediction(data)
     elif page == "📈 Performance Dashboard":
         show_Performance_Dashboard(data)
     
@@ -333,7 +333,7 @@ def show_Home(data):
             total_guests = data['total_guests'].sum()
         else:
             total_guests = (data['adults'] + data['children'] + data['babies']).sum()
-        st.metric("Total Guests", f"{total_guests:,}")
+        st.metric("Total Guests", f"{total_guests:.2f}")
     
     st.markdown("""
     ### 🎯 Business Problem
@@ -343,8 +343,8 @@ def show_Home(data):
     
     ### 🔍 Page Breakdown
     
-    - **Data Exploration**: Key insights from analysis
     - **Price Prediction**: Average Daily Rate estimate
+    - **Data Exploration**: Key insights from analysis
     - **Performance Dashboard**: Key metrics and visualiztions
     """)
 def show_data_exploration(data):
