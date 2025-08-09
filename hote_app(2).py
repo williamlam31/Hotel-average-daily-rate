@@ -271,7 +271,7 @@ def main():
     if page == "🏠 Home":
         # Clear sidebar content for this page if needed
         st.sidebar.empty()
-        show_home(data)
+        show_Home(data)
     
     elif page == "📊 Data Exploration":
         # Add page-specific sidebar content if needed
