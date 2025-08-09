@@ -469,8 +469,8 @@ def show_Price_Prediction(data):
             
             # Display prediction
             st.markdown(f"""
-            <div class="prediction-box">
-                <h3>style="color: #000000; Predicted Average Daily Rate</h3>
+            <div style="background-color: #ffffff; color: #000000; padding: 2rem; border-radius: 1rem; border-left: 5px solid #2196f3; margin: 1rem 0;">
+                <h3 style="color: #000000;">💰 Predicted Average Daily Rate</h3>
                 <h2 style="color: #000000; font-size: 3rem;">${prediction:.2f}</h2>
                  <p style="color: #000000;">Confidence: Based on historical patterns and current market conditions</p>
             </div>
