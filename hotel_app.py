@@ -122,8 +122,6 @@ def load_and_preprocess_data():
     # Create derived features
     df_new['total_nights'] = df_new['stays_in_weekend_nights'] + df_new['stays_in_week_nights']
     df_new['total_guests'] = df_new['adults'] + df_new['children'] + df_new['babies']
-    df_new['adr_per_guest'] = df_new['adr'] / df_new['total_guests']
-    df_new['booking_changes_per_day'] = df_new['booking_changes'] / (df_new['lead_time'] + 1)
     
     # Month encoding and season creation
     month_assignment = {'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
@@ -155,14 +153,9 @@ def load_and_preprocess_data():
     
     # Filter relevant columns for the model input, ensuring they exist
     model_features = [
-        'lead_time', 'arrival_date_year', 'arrival_month_numeric',
-        'arrival_date_week_number', 'arrival_date_day_of_month',
+        'lead_time', 'arrival_month_numeric',
         'stays_in_weekend_nights', 'stays_in_week_nights', 'adults',
-        'children', 'babies', 'is_repeated_guest', 'previous_cancellations',
-        'previous_bookings_not_canceled', 'booking_changes',
-        'days_in_waiting_list', 'required_car_parking_spaces',
-        'total_of_special_requests', 'total_guests', 'total_nights',
-        'booking_changes_per_day', 'adr_per_guest'
+        'children', 'babies','total_of_special_requests', 'total_guests', 'total_nights',
     ]
     
     # Add encoded categorical columns to the feature list
@@ -420,32 +413,15 @@ def show_Price_Prediction(data):
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            hotel = st.selectbox("Hotel Type", options=['Resort Hotel', 'City Hotel'])
-            lead_time = st.number_input("Lead Time (days)", min_value=0, max_value=500, value=50)
-            arrival_year = st.number_input("Arrival Year", min_value=2015, max_value=2025, value=2024)
             arrival_month = st.selectbox("Arrival Month",
                                        options=['January', 'February', 'March', 'April', 'May', 'June',
                                                'July', 'August', 'September', 'October', 'November', 'December'])
-            arrival_week = st.number_input("Week Number", min_value=1, max_value=53, value=26)
         
         with col2:
-            arrival_day = st.number_input("Day of Month", min_value=1, max_value=31, value=15)
-            weekend_nights = st.number_input("Weekend Nights", min_value=0, max_value=10, value=1)
-            week_nights = st.number_input("Week Nights", min_value=0, max_value=20, value=2)
-            adults = st.number_input("Adults", min_value=0, max_value=10, value=2)
-            children = st.number_input("Children", min_value=0, max_value=5, value=0)
+            total_guests = st.number_input("Total Guests", value = 0)
         
         with col3:
-            babies = st.number_input("Babies", min_value=0, max_value=3, value=0)
-            meal = st.selectbox("Meal Plan", options=['BB', 'FB', 'HB', 'SC', 'Undefined'])
-            market_segment = st.selectbox("Market Segment",
-                                        options=['Direct', 'Corporate', 'Online TA', 'Offline TA/TO',
-                                                'Complementary', 'Groups', 'Aviation'])
-            distribution_channel = st.selectbox("Distribution Channel",
-                                               options=['Direct', 'Corporate', 'TA/TO', 'Undefined', 'GDS'])
-            customer_type = st.selectbox("Customer Type",
-                                       options=['Transient', 'Contract', 'Transient-Party', 'Group'])
-  
+              total_nights = st.number_input("Total Nights", value = 0)
         
         submit_button = st.form_submit_button("🔮 Predict ADR")
     
@@ -468,12 +444,6 @@ def show_Price_Prediction(data):
                 'adults': adults,
                 'children': children,
                 'babies': babies,
-                'is_repeated_guest': is_repeated_guest,
-                'previous_cancellations': previous_cancellations,
-                'previous_bookings_not_canceled': previous_bookings,
-                'booking_changes': booking_changes,
-                'days_in_waiting_list': days_waiting,
-                'required_car_parking_spaces': parking_spaces,
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
                 'total_nights': weekend_nights + week_nights,
@@ -554,7 +524,6 @@ def show_Price_Prediction(data):
 def show_Performance_Dashboard(data):
     """Display performance dashboard"""
     st.markdown('<h2 class="sub-header">📈 Performance Dashboard</h2>', unsafe_allow_html=True)
-
     
     # Model performance metrics
     st.subheader("Model Performance Summary")
