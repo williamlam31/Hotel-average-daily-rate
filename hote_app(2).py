@@ -256,21 +256,56 @@ def main():
     st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">AI-Powered Average Daily Rate (ADR) Prediction System</p>', unsafe_allow_html=True)
     
     # Sidebar
-    pages = {
-        "Navigation": [
-        st.Page("Home.py", title="Home"),
-        st.Page("Price Prediction.py", title="Prediction"),
-        st.Page("Performance Dasboard.py", title="Performance Dashboard")
-        ]
-    }
-    pg = st.navigation(pages)
-    pg.run()
-    # Load data
+   def page_2():
+n():
+    # Header
+    st.markdown('<h1 class="main-header">🏨 Hotel Revenue Optimizer</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">AI-Powered Average Daily Rate (ADR) Prediction System</p>', unsafe_allow_html=True)
+    
+    # Sidebar
+    st.sidebar.title("Navigation")
+    page = st.sidebar.selectbox("Choose a page",
+                               ["🏠 Home", "📊 Data Exploration", "🤖 Model Training", "💰 Price Prediction", "📈 Performance Dashboard"])
+    
+    # Load data only once
     data, X_train_data, y_train_data = load_and_preprocess_data()
     
     if data is None or X_train_data is None or y_train_data is None:
         st.error("Error loading or preprocessing data. Please check the data source and code.")
         return
+    
+    # Clear the main content area for each page
+    # Page routing - each page will be completely separate
+    if page == "🏠 Home":
+        # Clear sidebar content for this page if needed
+        st.sidebar.empty()
+        show_home_page(data)
+    
+    elif page == "📊 Data Exploration":
+        # Add page-specific sidebar content if needed
+        st.sidebar.markdown("---")
+        st.sidebar.markdown("### Data Filters")
+        # You can add filters here for the data exploration page
+        show_data_exploration(data)
+    
+    elif page == "🤖 Model Training":
+        st.sidebar.markdown("---")
+        st.sidebar.markdown("### Training Options")
+        # Add training-specific options here
+        show_model_training(X_train_data, y_train_data)
+    
+    elif page == "💰 Price Prediction":
+        st.sidebar.markdown("---")
+        st.sidebar.markdown("### Quick Actions")
+        if st.sidebar.button("Reset Form"):
+            st.experimental_rerun()
+        show_prediction_page(data)
+    
+    elif page == "📈 Performance Dashboard":
+        st.sidebar.markdown("---")
+        st.sidebar.markdown("### Dashboard Options")
+        # Add dashboard-specific options here
+        show_performance_dashboard(data)
     
     # Page routing
     if page == "🏠 Home":
