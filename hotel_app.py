@@ -410,6 +410,14 @@ def show_Price_Prediction(data):
     """Display prediction page"""
     st.markdown('<h2 class="sub-header">💰 Price Prediction</h2>', unsafe_allow_html=True)
     
+    st.markdown(
+       "<style>" +
+        ".element-container button.step-up { display: none; } " +
+        ".element-container button.step-down  { display: none; } " +
+        ".element-container div[data-baseweb] { border-radius: 4px; } "
+       "</style>"
+)
+    
     st.write("Enter booking details to get an ADR prediction:")
     
     # Input form
@@ -442,7 +450,6 @@ def show_Price_Prediction(data):
             input_data = {
                 'lead_time': lead_time,
                 'arrival_month_numeric': month_mapping[arrival_month],
-                'adults': adults,
                 'children': children,
                 'babies': babies,
                 'is_repeated_guest': is_repeated_guest,
