@@ -156,13 +156,7 @@ def load_and_preprocess_data():
         'lead_time', 'arrival_month_numeric',
         'days_in_waiting_list', 'total_of_special_requests', 'total_guests', 'total_nights']
     
-    # Add encoded categorical columns to the feature list
-    encoded_cols = [col for col in df_new_encoded.columns if col.startswith(tuple(categorical_columns_final)) and col != 'adr']
-    model_features.extend(encoded_cols)
-    
-    # Filter the DataFrame to include only the model features and the target variable
-    # Ensure all model_features exist in df_new_encoded before selecting
-    existing_model_features = [col for col in model_features if col in df_new_encoded.columns]
+   
     X = df_new_encoded[existing_model_features]
     y = df_new_encoded['adr']
     
@@ -426,7 +420,7 @@ def show_Price_Prediction(data):
         
         with col2:
             total_guests = st.number_input("Total Guests", value = 0)
-        
+            days_waiting = st.number_input("Days in Waiting List", value = 0)
         with col3:
             special_requests = st.number_input("Total of Special Requests", value = 0)
             lead_time = st.number_input("Lead Time", value = 0)
@@ -445,8 +439,8 @@ def show_Price_Prediction(data):
                 'lead_time': lead_time,
                 'arrival_month_numeric': month_mapping[arrival_month],
                 'total_of_special_requests': special_requests,
-                'total_guests': adults + children + babies,
-                'total_nights': weekend_nights + week_nights,
+                'total_guests': total_guests,
+                'total_nights': total_nights,
                 'days_in_waiting_list': days_waiting,
             }
             # Add derived features to input_data
