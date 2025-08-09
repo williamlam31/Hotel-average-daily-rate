@@ -3,7 +3,7 @@ streamlit
 kaggle
 google
 seaborn
-matplotlib
+matplotlib>=3.0.0
 plotly
 sklearn
 joblib
