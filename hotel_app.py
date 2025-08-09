@@ -445,12 +445,6 @@ def show_Price_Prediction(data):
             }
         
             
-            # Prepare input data using the helper function
-            input_prepared = prepare_input_features(input_df_encoded.iloc[0].to_dict(),
-                                                   st.session_state.feature_names,
-                                                   st.session_state.scaler,
-                                                   st.session_state.use_scaling)
-            
             # Make prediction
             model = st.session_state.best_model
             prediction = model.predict(input_prepared)[0]
