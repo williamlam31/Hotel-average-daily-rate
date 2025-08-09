@@ -314,8 +314,6 @@ def initialize_session_state():
         show_Home(data)
     elif page == "📊 Data Exploration":
         show_data_exploration(data)
-    elif page == "🤖 Model Training":
-        show_model_training(X_train_data, y_train_data)
     elif page == "💰 Price Prediction":
         show_Price_Prediction(data)
     elif page == "📈 Performance Dashboard":
@@ -414,73 +412,6 @@ def show_data_exploration(data):
     
     with col3:
         st.metric("City Hotel ADR", f"${city_adr:.2f}")
-
-def show_model_training(X, y):
-    """Display model training page"""
-    st.markdown('<h2 class="sub-header">🤖 Model Training</h2>', unsafe_allow_html=True)
-    st.write("Train multiple regression models to predict Average Daily Rate (ADR)")
-    
-    if st.button("🚀 Train Models", key="train_button"):
-        with st.spinner("Training models... This may take a few minutes."):
-            try:
-                # Remove outliers for better training
-                Q1 = y.quantile(0.25)
-                Q3 = y.quantile(0.75)
-                IQR = Q3 - Q1
-                lower_bound = Q1 - 1.5 * IQR
-                upper_bound = Q3 + 1.5 * IQR
-                
-                # Corrected mask to keep values within the bounds
-                mask = (y >= lower_bound) & (y <= upper_bound)
-                X_clean = X[mask]
-                y_clean = y[mask]
-                
-                # Train models
-                results, X_test, y_test, scaler = train_models(X_clean, y_clean)
-                
-                # Store in session state
-                st.session_state.model_results = results
-                st.session_state.X_test = X_test
-                st.session_state.y_test = y_test
-                st.session_state.scaler = scaler
-                st.session_state.feature_names = X_clean.columns.tolist()  # Store feature names from clean data
-                st.session_state.model_trained = True
-                
-                # Find best model
-                best_model_name = min(results.keys(), key=lambda k: results[k]['rmse'])
-                st.session_state.best_model_name = best_model_name
-                st.session_state.best_model = results[best_model_name]['model']
-                st.session_state.use_scaling = results[best_model_name]['use_scaling']
-                
-                st.success("✅ Models trained successfully!")
-                
-                # Display results
-                st.subheader("Model Performance Comparison")
-                
-                # Create performance dataframe
-                perf_data = []
-                for name, result in results.items():
-                    perf_data.append({
-                        'Model': name,
-                        'MAE': result['mae'],
-                        'RMSE': result['rmse'],
-                        'R²': result['r2']
-                    })
-                
-                perf_df = pd.DataFrame(perf_data)
-                st.dataframe(perf_df.round(4))
-                
-                # Best model highlight
-                st.markdown(f'<div class="prediction-box"><strong>🏆 Best Model: {best_model_name}</strong><br>'
-                           f'RMSE: {results[best_model_name]["rmse"]:.2f} | '
-                           f'R²: {results[best_model_name]["r2"]:.3f}</div>',
-                           unsafe_allow_html=True)
-                
-            except Exception as e:
-                st.error(f"Error during training: {str(e)}")
-    
-    if st.session_state.model_trained:
-        st.success("Models are ready! Go to 'Price Prediction' to make forecasts.")
 
 def show_Price_Prediction(data):
     """Display prediction page"""
