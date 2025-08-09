@@ -267,12 +267,11 @@ def main():
         st.error("Error loading or preprocessing data. Please check the data source and code.")
         return
     
-    # Clear the main content area for each page
     # Page routing - each page will be completely separate
     if page == "🏠 Home":
         # Clear sidebar content for this page if needed
         st.sidebar.empty()
-        show_home_page(data)
+        show_home(data)
     
     elif page == "📊 Data Exploration":
         # Add page-specific sidebar content if needed
@@ -292,13 +291,13 @@ def main():
         st.sidebar.markdown("### Quick Actions")
         if st.sidebar.button("Reset Form"):
             st.experimental_rerun()
-        show_prediction_page(data)
+        show_Prediction_Page(data)
     
     elif page == "📈 Performance Dashboard":
         st.sidebar.markdown("---")
         st.sidebar.markdown("### Dashboard Options")
         # Add dashboard-specific options here
-        show_performance_dashboard(data)
+        show_Performance_Dashboard(data)
     
 
 def show_Home(data):
