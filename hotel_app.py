@@ -564,7 +564,6 @@ def show_Performance_Dashboard(data):
                     st.session_state.use_scaling = results[best_model_name]['use_scaling']
                     
                     st.success("✅ Models updated successfully!")
-                    st.experimental_rerun()
                     
                 except Exception as e:
                     st.error(f"Error updating models: {str(e)}")
