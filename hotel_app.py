@@ -444,9 +444,10 @@ def show_Price_Prediction(data):
                 'days_in_waiting_list': days_waiting,
             }
 
-            input_prepared = prepare_input_features(st.session_state.feature_names,
-                                                   st.session_state.scaler,
-                                                   st.session_state.use_scaling)
+            input_prepared = prepare_input_features(input_data,
+                                      st.session_state.feature_names,
+                                      st.session_state.scaler,
+                                      st.session_state.use_scaling)
             
             model = st.session_state.best_model
             prediction = model.predict(input_prepared)[0]
@@ -481,7 +482,7 @@ def show_Price_Prediction(data):
                 st.metric("Estimated Revenue", f"${revenue_estimate:.2f}")
             
             with col3:
-                revenue_per_guest = revenue_estimate / (adults + children + babies) if (adults + children + babies) > 0 else 0
+                revenue_per_guest = revenue_estimate / total_guests if total_guests > 0 else 0
                 st.metric("Revenue per Guest", f"${revenue_per_guest:.2f}")
                 
         except Exception as e:
