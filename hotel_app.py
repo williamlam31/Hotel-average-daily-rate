@@ -434,7 +434,7 @@ def show_Price_Prediction(data):
             total_guests = st.number_input("Total Guests", value = 0)
         
         with col3:
-            totat_of_special_requests = st.number_input("Special Requests", value = 0)
+            totat_of_special_requests = st.number_input("Total of Special Requests", value = 0)
             lead_time = st.number_input("Lead Time", value = 0)
         
         submit_button = st.form_submit_button("🔮 Predict ADR")
