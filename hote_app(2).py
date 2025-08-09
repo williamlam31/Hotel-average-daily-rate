@@ -256,9 +256,10 @@ def main():
     st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">AI-Powered Average Daily Rate (ADR) Prediction System</p>', unsafe_allow_html=True)
     
     # Sidebar
-    st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Choose a page",
-                               ["🏠 Home", "📊 Data Exploration", "🤖 Model Training", "💰 Price Prediction", "📈 Performance Dashboard"])
+    pages = {
+        st.Page("Home.py", title="Home"),
+        st.Page("Price Prediction.py", title="Prediction")
+        st.Page("Performance Dasboard.py", title="Performance Dashboard"
     
     # Load data
     data, X_train_data, y_train_data = load_and_preprocess_data()
