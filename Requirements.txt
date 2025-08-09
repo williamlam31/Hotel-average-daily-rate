@@ -2,6 +2,3 @@ numpy
 pandas
 matplotlib
 streamlit
-sklearn
-joblib
-kaggle
