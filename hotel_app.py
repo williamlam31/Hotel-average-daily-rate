@@ -493,7 +493,7 @@ def show_Price_Prediction(data):
                 st.metric("vs. Average ADR", f"${prediction - avg_adr:.2f}", f"{((prediction/avg_adr - 1) * 100):.1f}%")
             
             with col2:
-                revenue_estimate = prediction * (weekend_nights + week_nights)
+                revenue_estimate = prediction * total_nights
                 st.metric("Estimated Revenue", f"${revenue_estimate:.2f}")
             
             with col3:
