@@ -285,13 +285,10 @@ def initialize_session_state():
     # Navigation buttons
     if st.sidebar.button("🏠 Home", use_container_width=True):
         st.session_state.current_page = "🏠 Home"
-    
-    if st.sidebar.button("📊 Data Exploration", use_container_width=True):
-        st.session_state.current_page = "📊 Data Exploration"
-    
-    if st.sidebar.button("💰 Price Prediction", use_container_width=True):
+    if st.sidebar.button("💰 Price Prediction", use_container_width=True):  # MOVED UP
         st.session_state.current_page = "💰 Price Prediction"
-    
+    if st.sidebar.button("📊 Data Exploration", use_container_width=True):  # MOVED DOWN
+        st.session_state.current_page = "📊 Data Exploration"
     if st.sidebar.button("📈 Performance Dashboard", use_container_width=True):
         st.session_state.current_page = "📈 Performance Dashboard"
     
