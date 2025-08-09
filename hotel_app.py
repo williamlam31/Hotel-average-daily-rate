@@ -420,6 +420,7 @@ def show_Price_Prediction(data):
     ".element-container div[data-baseweb] { border-radius: 4px; } "
     "</style>",
     unsafe_allow_html=True
+    )
 
     
     st.write("Enter booking details to get an ADR prediction:")
