@@ -45,7 +45,7 @@ border: 1px solid #dee2e6;
 margin: 0.5rem 0;
 }
 .prediction-box {
-background-color: #e3f2fd;
+background-color: #0B5394;
 padding: 2rem;
 border-radius: 1rem;
 border-left: 5px solid #2196f3;
@@ -472,8 +472,7 @@ def show_Price_Prediction(data):
             <div style="background-color: #ffffff; color: #000000; padding: 2rem; border-radius: 1rem; border-left: 5px solid #2196f3; margin: 1rem 0;">
                 <h3 style="color: #000000;">💰 Predicted Average Daily Rate</h3>
                 <h2 style="color: #000000; font-size: 3rem;">${prediction:.2f}</h2>
-                 <p style="color: #000000;">Confidence: Based on historical patterns and current market conditions</p>
-            </div>
+       
             """, unsafe_allow_html=True)
             
             # Business insights
