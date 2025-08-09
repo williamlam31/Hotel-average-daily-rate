@@ -153,7 +153,7 @@ def load_and_preprocess_data():
     
     # Filter relevant columns for the model input, ensuring they exist
     model_features = [
-        'lead_time', 'arrival_month_numeric',
+        'arrival_month_numeric',
         'stays_in_weekend_nights', 'stays_in_week_nights', 'adults',
         'children', 'babies','total_of_special_requests', 'total_guests', 'total_nights',
     ]
