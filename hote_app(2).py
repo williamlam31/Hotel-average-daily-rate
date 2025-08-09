@@ -259,8 +259,9 @@ def main():
     pages = {
         st.Page("Home.py", title="Home"),
         st.Page("Price Prediction.py", title="Prediction")
-        st.Page("Performance Dasboard.py", title="Performance Dashboard"
-    
+        st.Page("Performance Dasboard.py", title="Performance Dashboard")
+    pg = st.navigation(pages)
+    pg.run()
     # Load data
     data, X_train_data, y_train_data = load_and_preprocess_data()
     
