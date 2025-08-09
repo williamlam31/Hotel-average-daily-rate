@@ -343,9 +343,10 @@ def show_Home(data):
     
     ### 🔍 Page Breakdown
     
-    - **Price Prediction**: Input booking information and ADR will be estimated 
-    - **Performance Dashboard**: Key Metrics and Visualiztions
-    - **Data Exploration**: Key Insights from the analysis
+    - **Price Prediction**: Average Daily Rate estimate
+    - **Performance Dashboard**: Key metrics and visualiztions
+    - **Data Exploration**: Key insights from analysis
+    """)
  
     
 
