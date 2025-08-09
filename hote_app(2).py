@@ -254,18 +254,7 @@ def main():
     # Header
     st.markdown('<h1 class="main-header">🏨 Hotel Revenue Optimizer</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">AI-Powered Average Daily Rate (ADR) Prediction System</p>', unsafe_allow_html=True)
-    
-    # Sidebar
-   def page_2():
-n():
-    # Header
-    st.markdown('<h1 class="main-header">🏨 Hotel Revenue Optimizer</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">AI-Powered Average Daily Rate (ADR) Prediction System</p>', unsafe_allow_html=True)
-    
-    # Sidebar
-    st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Choose a page",
-                               ["🏠 Home", "📊 Data Exploration", "🤖 Model Training", "💰 Price Prediction", "📈 Performance Dashboard"])
+
     
     # Load data only once
     data, X_train_data, y_train_data = load_and_preprocess_data()
@@ -307,17 +296,6 @@ n():
         # Add dashboard-specific options here
         show_performance_dashboard(data)
     
-    # Page routing
-    if page == "🏠 Home":
-        show_Home(data)
-    elif page == "📊 Data Exploration":
-        show_data_exploration(data)
-    elif page == "🤖 Model Training":
-        show_model_training(X_train_data, y_train_data)
-    elif page == "💰 Price Prediction":
-        show_Price_Prediction(data)  # Pass data for insights
-    elif page == "📈 Performance Dashboard":
-        show_Performance_Dashboard(data)  # Pass data for insights
 
 def show_Home(data):
     """Display the home page"""
