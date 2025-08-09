@@ -523,27 +523,6 @@ def show_Price_Prediction(data):
             customer_type = st.selectbox("Customer Type",
                                        options=['Transient', 'Contract', 'Transient-Party', 'Group'])
         
-        # Additional features
-        st.subheader("Additional Details")
-        col4, col5 = st.columns(2)
-        
-        with col4:
-            is_repeated_guest = st.selectbox("Repeated Guest", options=[0, 1])
-            previous_cancellations = st.number_input("Previous Cancellations", min_value=0, max_value=20, value=0)
-            booking_changes = st.number_input("Booking Changes", min_value=0, max_value=20, value=0)
-            days_waiting = st.number_input("Days in Waiting List", min_value=0, max_value=100, value=0)
-        
-        with col5:
-            parking_spaces = st.number_input("Parking Spaces Required", min_value=0, max_value=5, value=0)
-            special_requests = st.number_input("Special Requests", min_value=0, max_value=10, value=0)
-            previous_bookings = st.number_input("Previous Bookings Not Canceled", min_value=0, max_value=50, value=0)
-            deposit_type = st.selectbox("Deposit Type", options=['No Deposit', 'Non Refund', 'Refundable'])
-        
-        # Get unique values from data for room types
-        reserved_room_type = st.selectbox("Reserved Room Type", options=sorted(data['reserved_room_type'].unique()))
-        assigned_room_type = st.selectbox("Assigned Room Type", options=sorted(data['assigned_room_type'].unique()))
-        reservation_status = st.selectbox("Reservation Status", options=['Check-Out', 'Canceled', 'No-Show'])
-        
         submit_button = st.form_submit_button("🔮 Predict ADR")
     
     if submit_button:
