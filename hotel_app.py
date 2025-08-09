@@ -433,9 +433,8 @@ def show_Price_Prediction(data):
                 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
             }
             
-            iinput_data = {
+            input_data = {
                 'arrival_month_numeric': month_mapping[arrival_month],
-                'stays_in_week_nights': week_nights,
                 'adults': adults,
                 'children': children,
                 'babies': babies,
