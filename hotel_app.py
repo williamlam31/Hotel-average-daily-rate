@@ -437,16 +437,27 @@ def show_Price_Prediction(data):
                 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
             }
             
-            input_data = {
+       input_data = {
+                'lead_time': lead_time,
+                'arrival_date_year': arrival_year,
                 'arrival_month_numeric': month_mapping[arrival_month],
+                'arrival_date_week_number': arrival_week,
+                'arrival_date_day_of_month': arrival_day,
+                'stays_in_weekend_nights': weekend_nights,
+                'stays_in_week_nights': week_nights,
                 'adults': adults,
                 'children': children,
                 'babies': babies,
+                'is_repeated_guest': is_repeated_guest,
+                'previous_cancellations': previous_cancellations,
+                'previous_bookings_not_canceled': previous_bookings,
+                'booking_changes': booking_changes,
+                'days_in_waiting_list': days_waiting,
+                'required_car_parking_spaces': parking_spaces,
                 'total_of_special_requests': special_requests,
                 'total_guests': adults + children + babies,
                 'total_nights': weekend_nights + week_nights,
             }
-            
             # Add derived features to input_data
             input_data['booking_changes_per_day'] = input_data['booking_changes'] / (input_data['lead_time'] + 1)
             input_data['adr_per_guest'] = 0 if input_data['total_guests'] == 0 else 100 / input_data['total_guests']  # Handle zero guests
