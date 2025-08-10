@@ -546,7 +546,7 @@ def show_data_exploration(data):
     corr_display.index = [feature_labels.get(idx, idx) for idx in corr_display.index]
     
     fig_corr = px.imshow(corr_display,
-                        title='Feature Correlation Matrix (Key Variables)',
+                        title='Feature Correlation Matrix (Select Variables)',
                         color_continuous_scale='RdBu_r',
                         aspect='auto',
                         text_auto=True)
