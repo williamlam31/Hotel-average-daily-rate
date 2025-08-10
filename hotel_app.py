@@ -659,21 +659,6 @@ def show_Average_Daily_Rate(data):
 def show_Performance_Dashboard(data):
     st.markdown('<h2 class="sub-header">📈 Performance Dashboard</h2>', unsafe_allow_html=True)
 
-    # Model performance metrics
-    st.subheader("Model Performance Summary")
-    results = st.session_state.model_results
-
-    # Detailed metrics table
-    st.subheader("Detailed Performance Metrics")
-    st.dataframe(perf_df.round(4))
-
-    # Best model highlight
-    st.markdown(f'<div class="prediction-box"><strong>🏆 Best Model: {st.session_state.best_model_name}</strong><br>'
-               f'RMSE: {results[st.session_state.best_model_name]["rmse"]:.2f} | '
-               f'R²: {results[st.session_state.best_model_name]["r2"]:.3f}</div>',
-               unsafe_allow_html=True)
-
-    # ========== NEW SECTION: KEY INSIGHTS FROM ANALYSIS ==========
     st.subheader("🔍 Key Insights from Analysis")
     
     # Focus on the 6 key features used in the model
