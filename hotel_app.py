@@ -496,87 +496,49 @@ def show_data_exploration(data):
         st.metric("Highest Lead Time Month", highest_lead_month)
     
     # Correlation heatmap
-    st.subheader("Feature Correlations")
-    numeric_cols = data.select_dtypes(include=[np.number]).columns
-    corr_matrix = data[numeric_cols].corr()
+st.subheader("Feature Correlations")
+    # Select only the specified features for correlation analysis
+    selected_features = [
+        'lead_time', 'total_nights', 'total_guests', 
+        'total_of_special_requests', 'days_in_waiting_list', 
+        'arrival_month_numeric', 'adr'
+    ]
     
-    fig_corr = px.imshow(corr_matrix,
-                        title='Correlation Matrix',
+    # Filter to only include features that exist in the data
+    available_features = [col for col in selected_features if col in data.columns]
+    corr_matrix = data[available_features].corr()
+    
+    # Create custom labels for better readability
+    feature_labels = {
+        'lead_time': 'Lead Time',
+        'total_nights': 'Total Nights',
+        'total_guests': 'Total Guests',
+        'total_of_special_requests': 'Special Requests',
+        'days_in_waiting_list': 'Days in Waiting List',
+        'arrival_month_numeric': 'Arrival Month',
+        'adr': 'ADR'
+    }
+    
+    # Rename columns and index for display
+    corr_display = corr_matrix.copy()
+    corr_display.columns = [feature_labels.get(col, col) for col in corr_display.columns]
+    corr_display.index = [feature_labels.get(idx, idx) for idx in corr_display.index]
+    
+    fig_corr = px.imshow(corr_display,
+                        title='Feature Correlation Matrix (Key Variables)',
                         color_continuous_scale='RdBu_r',
-                        aspect='auto')
+                        aspect='auto',
+                        text_auto=True)
+    
+    # Update layout for better readability
+    fig_corr.update_layout(
+        width=600,
+        height=500
+    )
+    
     st.plotly_chart(fig_corr, use_container_width=True)
     
-    # Key insights
-    st.subheader("Key Insights")
-    avg_adr = data['adr'].mean()
-    resort_adr = data[data['hotel'] == 'Resort Hotel']['adr'].mean()
-    city_adr = data[data['hotel'] == 'City Hotel']['adr'].mean()
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric("Overall Avg ADR", f"${avg_adr:.2f}")
-    
-    with col2:
-        st.metric("Resort Hotel ADR", f"${resort_adr:.2f}")
-    
-    with col3:
-        st.metric("City Hotel ADR", f"${city_adr:.2f}")
-    
-    # Correlation heatmap
-    st.subheader("Feature Correlations")
-    numeric_cols = data.select_dtypes(include=[np.number]).columns
-    corr_matrix = data[numeric_cols].corr()
-    
-    fig_corr = px.imshow(corr_matrix,
-                        title='Correlation Matrix',
-                        color_continuous_scale='RdBu_r',
-                        aspect='auto')
-    st.plotly_chart(fig_corr, use_container_width=True)
-    
-    # Key insights
-    st.subheader("Key Insights")
-    avg_adr = data['adr'].mean()
-    resort_adr = data[data['hotel'] == 'Resort Hotel']['adr'].mean()
-    city_adr = data[data['hotel'] == 'City Hotel']['adr'].mean()
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric("Overall Avg ADR", f"${avg_adr:.2f}")
-    
-    with col2:
-        st.metric("Resort Hotel ADR", f"${resort_adr:.2f}")
-    
-    with col3:
-        st.metric("City Hotel ADR", f"${city_adr:.2f}")
-    
-    # Correlation heatmap
-    st.subheader("Feature Correlations")
-    numeric_cols = data.select_dtypes(include=[np.number]).columns
-    corr_matrix = data[numeric_cols].corr()
-    fig_corr = px.imshow(corr_matrix,
-                        title='Correlation Matrix',
-                        color_continuous_scale='RdBu_r',
-                        aspect='auto')
-    st.plotly_chart(fig_corr, use_container_width=True)
-    
-    # Key insights
-    st.subheader("Key Insights")
-    avg_adr = data['adr'].mean()
-    resort_adr = data[data['hotel'] == 'Resort Hotel']['adr'].mean()
-    city_adr = data[data['hotel'] == 'City Hotel']['adr'].mean()
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric("Overall Avg ADR", f"${avg_adr:.2f}")
-    
-    with col2:
-        st.metric("Resort Hotel ADR", f"${resort_adr:.2f}")
-    
-    with col3:
-        st.metric("City Hotel ADR", f"${city_adr:.2f}") 
+   
 
 def show_Price_Prediction(data):
     """Display prediction page"""
