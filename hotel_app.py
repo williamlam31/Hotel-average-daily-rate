@@ -253,7 +253,7 @@ def main():
     # Header
     st.markdown('<h1 class="main-header">🏨 Hotel Revenue Optimizer</h1>', unsafe_allow_html=True)
 
-initialize_session_state()
+    initialize_session_state()    
 
 def initialize_session_state():
     """Initialize all session state variables"""
