@@ -664,6 +664,135 @@ def show_Performance_Dashboard(data):
 
     results = st.session_state.model_results
 
+    key_features = ['lead_time', 'total_nights', 'total_guests', 
+                   'total_of_special_requests', 'days_in_waiting_list', 'arrival_month_numeric']
+    
+    # Create insights tabs
+    insight_tab1, insight_tab2, insight_tab3 = st.tabs(["💰 Pricing Patterns", "📊 Feature Impact", "🎯 Business Intelligence"])
+    
+    with insight_tab1:
+        st.write("**Key Pricing Insights:**")
+        
+        # ADR statistics
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            avg_adr = data['adr'].mean()
+            st.metric("Average ADR", f"${avg_adr:.2f}")
+        
+        with col2:
+            median_adr = data['adr'].median()
+            st.metric("Median ADR", f"${median_adr:.2f}")
+        
+        with col3:
+            adr_std = data['adr'].std()
+            st.metric("ADR Std Dev", f"${adr_std:.2f}")
+        
+        with col4:
+            max_adr = data['adr'].max()
+            st.metric("Peak ADR", f"${max_adr:.2f}")
+        
+        # Seasonal pricing insights
+        st.write("**Seasonal Pricing Trends:**")
+        monthly_adr = data.groupby('arrival_date_month')['adr'].mean().round(2)
+        
+        peak_season = monthly_adr.idxmax()
+        low_season = monthly_adr.idxmin()
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.info(f"🔥 **Peak Season**: {peak_season} (${monthly_adr[peak_season]:.2f} avg)")
+        
+        with col2:
+            st.info(f"❄️ **Low Season**: {low_season} (${monthly_adr[low_season]:.2f} avg)")
+    
+    with insight_tab2:
+        st.write("**Feature Correlation with ADR:**")
+        
+        # Calculate correlations with ADR for key features
+        correlations = {}
+        for feature in key_features:
+            if feature in data.columns:
+                corr = data[feature].corr(data['adr'])
+                correlations[feature] = corr
+        
+        # Create correlation visualization
+        corr_df = pd.DataFrame(list(correlations.items()), columns=['Feature', 'Correlation with ADR'])
+        corr_df = corr_df.sort_values('Correlation with ADR', key=abs, ascending=False)
+        
+        # Rename features for better display
+        feature_display_names = {
+            'lead_time': 'Lead Time',
+            'total_nights': 'Total Nights',
+            'total_guests': 'Total Guests',
+            'total_of_special_requests': 'Special Requests',
+            'days_in_waiting_list': 'Days in Waiting List',
+            'arrival_month_numeric': 'Arrival Month'
+        }
+        
+        corr_df['Feature_Display'] = corr_df['Feature'].map(feature_display_names)
+        
+        fig_corr = px.bar(corr_df, x='Correlation with ADR', y='Feature_Display',
+                         orientation='h',
+                         title='Feature Correlation with Average Daily Rate',
+                         color='Correlation with ADR',
+                         color_continuous_scale='RdBu_r')
+        st.plotly_chart(fig_corr, use_container_width=True)
+        
+        # Feature importance insights
+        st.write("**Top Predictive Features:**")
+        for idx, row in corr_df.head(3).iterrows():
+            correlation_strength = "Strong" if abs(row['Correlation with ADR']) > 0.5 else "Moderate" if abs(row['Correlation with ADR']) > 0.3 else "Weak"
+            direction = "Positive" if row['Correlation with ADR'] > 0 else "Negative"
+            st.write(f"• **{row['Feature_Display']}**: {correlation_strength} {direction.lower()} correlation ({row['Correlation with ADR']:.3f})")
+    
+    with insight_tab3:
+        st.write("**Actionable Business Intelligence:**")
+        
+        # Lead time insights
+        avg_lead_time = data['lead_time'].mean()
+        high_lead_time_adr = data[data['lead_time'] > avg_lead_time]['adr'].mean()
+        low_lead_time_adr = data[data['lead_time'] <= avg_lead_time]['adr'].mean()
+        
+        st.write("📅 **Booking Behavior:**")
+        st.write(f"• Average lead time: {avg_lead_time:.0f} days")
+        st.write(f"• High lead time bookings (>{avg_lead_time:.0f} days): ${high_lead_time_adr:.2f} avg ADR")
+        st.write(f"• Low lead time bookings (≤{avg_lead_time:.0f} days): ${low_lead_time_adr:.2f} avg ADR")
+        
+        # Guest composition insights
+        st.write("👥 **Guest Composition:**")
+        avg_guests = data['total_guests'].mean()
+        avg_nights = data['total_nights'].mean()
+        
+        st.write(f"• Average party size: {avg_guests:.1f} guests")
+        st.write(f"• Average stay duration: {avg_nights:.1f} nights")
+        
+        # Special requests impact
+        special_req_correlation = data['total_of_special_requests'].corr(data['adr'])
+        st.write("🎯 **Service Level:**")
+        st.write(f"• Special requests correlation with ADR: {special_req_correlation:.3f}")
+        if special_req_correlation > 0:
+            st.write("• Higher service requests typically associated with higher rates")
+        else:
+            st.write("• Special requests show minimal impact on pricing")
+        
+        # Recommendations
+        st.write("💡 **Pricing Strategy Recommendations:**")
+        
+        # Find the strongest predictor
+        strongest_predictor = corr_df.iloc[0]
+        if abs(strongest_predictor['Correlation with ADR']) > 0.3:
+            st.success(f"• Focus on optimizing **{strongest_predictor['Feature_Display']}** - strongest price predictor")
+        
+        # Seasonal recommendations
+        peak_months = data.groupby('arrival_date_month')['adr'].mean().nlargest(3).index.tolist()
+        st.info(f"• Implement dynamic pricing for peak months: {', '.join(peak_months)}")
+        
+        # Lead time strategy
+        if high_lead_time_adr > low_lead_time_adr:
+            st.info("• Consider early booking discounts to capture price-sensitive advance planners")
+        else:
+            st.info("• Last-minute bookings command premium - optimize availability management")
+
     # Create performance comparison chart
     perf_data = []
     for name, result in results.items():
