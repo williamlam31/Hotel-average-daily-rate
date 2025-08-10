@@ -285,7 +285,7 @@ def initialize_session_state():
     if st.sidebar.button("🏠 Home", use_container_width=True):
         st.session_state.current_page = "🏠 Home"
     if st.sidebar.button("💰 Average Daily Rate", use_container_width=True):  # MOVED UP
-        st.session_state.current_page = "💰 Price Prediction"
+        st.session_state.current_page = "💰 Average Daily Rate"
     if st.sidebar.button("📊 Data Exploration", use_container_width=True):  # MOVED DOWN
         st.session_state.current_page = "📊 Data Exploration"
     if st.sidebar.button("📈 Performance Dashboard", use_container_width=True):
@@ -564,7 +564,7 @@ def show_data_exploration(data):
 
 def show_Average_Daily_Rate(data):
     """Display prediction page"""
-    st.markdown('<h2 class="sub-header">💰 Price Prediction</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="sub-header">💰 Average Daily Rate</h2>', unsafe_allow_html=True)
     
     st.markdown(
     "<style>" +
