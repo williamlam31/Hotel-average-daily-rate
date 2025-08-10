@@ -421,7 +421,7 @@ def show_data_exploration(data):
     with col1:
         peak_month = adr_by_month.loc[adr_by_month['mean'].idxmax(), 'arrival_date_month']
         peak_adr = adr_by_month['mean'].max()
-        st.metric("Peak Month", peak_month, f"${peak_adr:.2f}")
+        st.metric("Peak Month", peak_month, f"${peak_adr}")
     
     with col2:
         low_month = adr_by_month.loc[adr_by_month['mean'].idxmin(), 'arrival_date_month']
