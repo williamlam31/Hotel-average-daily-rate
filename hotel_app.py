@@ -508,7 +508,7 @@ def show_data_exploration(data):
             y=1.02,
             xanchor="right",
             x=1
-    )
+        )
     
     st.plotly_chart(fig_dual, use_container_width=True)
     
