@@ -659,7 +659,6 @@ def show_Average_Daily_Rate(data):
 def show_Performance_Dashboard(data):
     st.markdown('<h2 class="sub-header">📈 Performance Dashboard</h2>', unsafe_allow_html=True)
 
-    st.subheader("🔍 Key Insights from Analysis")
     
     # Focus on the 6 key features used in the model
     key_features = ['lead_time', 'total_nights', 'total_guests', 
