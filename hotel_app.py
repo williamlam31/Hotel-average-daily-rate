@@ -341,7 +341,7 @@ def initialize_session_state():
     if page == "🏠 Home":
         show_Home(data)
     elif page == "💰 Average Daily Rate":
-        show_Price_Prediction(data)
+        show_Average_Daily_Rate(data)
     elif page == "📈 Performance Dashboard":
         show_Performance_Dashboard(data)
     elif page == "📊 Data Exploration":
