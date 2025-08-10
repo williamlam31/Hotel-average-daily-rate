@@ -407,55 +407,65 @@ def show_data_exploration(data):
         low_adr = adr_by_month['mean'].min()
         st.metric("Lowest Month", low_month, f"${low_adr:.2f}")
     
-    # ADR by Hotel Type
-    st.subheader("Lead Time vs ADR by Month")
-    
-    # Create lead time categories for better visualization
-    data_viz = data.copy()
-    data_viz['lead_time_category'] = pd.cut(data_viz['lead_time'], 
-                                           bins=[0, 30, 90, 180, 365, float('inf')], 
-                                           labels=['0-30 days', '31-90 days', '91-180 days', '181-365 days', '365+ days'])
+    st.subheader("Lead Time and ADR by Month")
     
     # Create month order for proper sorting
     month_order = ['January', 'February', 'March', 'April', 'May', 'June',
                    'July', 'August', 'September', 'October', 'November', 'December']
     
-    data_viz['arrival_date_month'] = pd.Categorical(data_viz['arrival_date_month'], 
-                                                   categories=month_order, 
-                                                   ordered=True)
+    # Calculate average lead time and ADR by month
+    monthly_stats = data.groupby('arrival_date_month').agg({
+        'lead_time': 'mean',
+        'adr': 'mean'
+    }).reset_index()
     
-    # Create the 3D visualization
-    fig_3d = go.Figure()
+    # Reorder by month
+    monthly_stats['arrival_date_month'] = pd.Categorical(monthly_stats['arrival_date_month'], 
+                                                        categories=month_order, 
+                                                        ordered=True)
+    monthly_stats = monthly_stats.sort_values('arrival_date_month')
     
-    # Add scatter plot with lead time as size and month as color
-    for i, month in enumerate(month_order):
-        month_data = data_viz[data_viz['arrival_date_month'] == month]
-        if not month_data.empty:
-            # Sample data if too large for performance
-            if len(month_data) > 1000:
-                month_data = month_data.sample(n=1000, random_state=42)
-            
-            fig_3d.add_trace(go.Scatter(
-                x=month_data['lead_time'],
-                y=month_data['adr'],
-                mode='markers',
-                name=month,
-                marker=dict(
-                    size=6,
-                    opacity=0.6,
-                    color=i,
-                    colorscale='Viridis',
-                    showscale=False
-                ),
-                hovertemplate='<b>%{fullData.name}</b><br>' +
-                             'Lead Time: %{x} days<br>' +
-                             'ADR: $%{y:.2f}<extra></extra>'
-            ))
+    # Create dual-axis chart
+    fig_dual = go.Figure()
     
-    fig_3d.update_layout(
-        title='Lead Time vs ADR by Month',
-        xaxis_title='Lead Time (Days)',
-        yaxis_title='ADR ($)',
+    # Add Lead Time bars
+    fig_dual.add_trace(go.Bar(
+        x=monthly_stats['arrival_date_month'],
+        y=monthly_stats['lead_time'],
+        name='Average Lead Time',
+        marker_color='#2196F3',
+        opacity=0.7,
+        yaxis='y',
+        hovertemplate='<b>%{x}</b><br>Lead Time: %{y:.0f} days<extra></extra>'
+    ))
+    
+    # Add ADR line on secondary y-axis
+    fig_dual.add_trace(go.Scatter(
+        x=monthly_stats['arrival_date_month'],
+        y=monthly_stats['adr'],
+        mode='lines+markers',
+        name='Average ADR',
+        line=dict(color='#FF9800', width=3),
+        marker=dict(size=8),
+        yaxis='y2',
+        hovertemplate='<b>%{x}</b><br>ADR: $%{y:.2f}<extra></extra>'
+    ))
+    
+    # Update layout with dual y-axes
+    fig_dual.update_layout(
+        title='Lead Time (Days) and ADR ($) by Month',
+        xaxis_title='Month',
+        yaxis=dict(
+            title='Lead Time (Days)',
+            side='left',
+            color='#2196F3'
+        ),
+        yaxis2=dict(
+            title='ADR ($)',
+            side='right',
+            overlaying='y',
+            color='#FF9800'
+        ),
         template='plotly_white',
         showlegend=True,
         legend=dict(
@@ -467,7 +477,7 @@ def show_data_exploration(data):
         )
     )
     
-    st.plotly_chart(fig_3d, use_container_width=True)
+    st.plotly_chart(fig_dual, use_container_width=True)
     
     # Add summary insights
     col1, col2, col3 = st.columns(3)
@@ -486,6 +496,34 @@ def show_data_exploration(data):
         lead_by_month = data.groupby('arrival_date_month')['lead_time'].mean()
         highest_lead_month = lead_by_month.idxmax()
         st.metric("Highest Lead Time Month", highest_lead_month)
+    
+    # Correlation heatmap
+    st.subheader("Feature Correlations")
+    numeric_cols = data.select_dtypes(include=[np.number]).columns
+    corr_matrix = data[numeric_cols].corr()
+    
+    fig_corr = px.imshow(corr_matrix,
+                        title='Correlation Matrix',
+                        color_continuous_scale='RdBu_r',
+                        aspect='auto')
+    st.plotly_chart(fig_corr, use_container_width=True)
+    
+    # Key insights
+    st.subheader("Key Insights")
+    avg_adr = data['adr'].mean()
+    resort_adr = data[data['hotel'] == 'Resort Hotel']['adr'].mean()
+    city_adr = data[data['hotel'] == 'City Hotel']['adr'].mean()
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("Overall Avg ADR", f"${avg_adr:.2f}")
+    
+    with col2:
+        st.metric("Resort Hotel ADR", f"${resort_adr:.2f}")
+    
+    with col3:
+        st.metric("City Hotel ADR", f"${city_adr:.2f}")
     
     # Correlation heatmap
     st.subheader("Feature Correlations")
