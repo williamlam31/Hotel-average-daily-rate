@@ -760,7 +760,7 @@ def show_Performance_Dashboard(data):
     
     # Special requests impact
     special_req_correlation = data['total_of_special_requests'].corr(data['adr'])
-    st.write("🎯 **Service Level:**")
+    st.write("🛎️ **Service Level:**")
     st.write(f"• Special requests correlation with ADR: {special_req_correlation:.3f}")
     if special_req_correlation > 0:
         st.write("• Higher service requests typically associated with higher rates")
