@@ -355,7 +355,7 @@ def show_Home(data):
     ### 🎯 Business Problem
     
     Hotel prices are dyanmic and influenced by factors such as lead time and seasonality. Since the hospitality industry is very competitive, this AI tool is 
-    to assist the hotel in determining an optimal that will attract guests and improve their financial outlook.
+    to assist the hotel in determining an optimal rate that will attract guests and improve their financial outlook.
     
     ### 🔍 Page Breakdown
     
