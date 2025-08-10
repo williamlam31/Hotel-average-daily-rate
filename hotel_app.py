@@ -657,7 +657,6 @@ def show_Average_Daily_Rate(data):
             st.error(f"Error making prediction: {str(e)}")
 
 def show_Performance_Dashboard(data):
-def show_Performance_Dashboard(data):
     st.markdown('<h2 class="sub-header">📈 Performance Dashboard</h2>', unsafe_allow_html=True)
 
     # Model performance metrics
