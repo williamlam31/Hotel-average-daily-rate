@@ -824,12 +824,6 @@ def show_Performance_Dashboard(data):
     st.subheader("Detailed Performance Metrics")
     st.dataframe(perf_df.round(4))
 
-    # Best model highlight
-    st.markdown(f'<div class="prediction-box"><strong>🏆 Best Model: {st.session_state.best_model_name}</strong><br>'
-               f'RMSE: {results[st.session_state.best_model_name]["rmse"]:.2f} | '
-               f'R²: {results[st.session_state.best_model_name]["r2"]:.3f}</div>',
-               unsafe_allow_html=True)
-
 
 
 # Run the main function
