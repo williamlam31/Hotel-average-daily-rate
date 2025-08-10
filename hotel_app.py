@@ -667,7 +667,7 @@ def show_Performance_Dashboard(data):
                    'total_of_special_requests', 'days_in_waiting_list', 'arrival_month_numeric']
     
     # SECTION 1: Key Pricing Insights
-    st.write("### 💰 Pricing Patterns")
+    st.write("### Pricing Patterns")
     
     # ADR statistics
     col1, col2, col3, col4 = st.columns(4)
@@ -702,7 +702,7 @@ def show_Performance_Dashboard(data):
         st.info(f"❄️ **Low Season**: {low_season} (${monthly_adr[low_season]:.2f} avg)")
     
     # SECTION 2: Feature Impact Analysis
-    st.write("### 📊 Feature Impact Analysis")
+    st.write("###  Feature Impact Analysis")
     
     # Calculate correlations with ADR for key features
     correlations = {}
@@ -752,7 +752,7 @@ def show_Performance_Dashboard(data):
     st.write(f"• Low lead time bookings (≤{avg_lead_time:.0f} days): ${low_lead_time_adr:.2f} avg ADR")
     
     # Guest composition insights
-    st.write("👥 **Guest Composition:**")
+    st.write(" **Guest Composition:**")
     avg_guests = data['total_guests'].mean()
     avg_nights = data['total_nights'].mean()
     
