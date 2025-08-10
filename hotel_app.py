@@ -788,33 +788,6 @@ def show_Performance_Dashboard(data):
     else:
         st.info("• Last-minute bookings command premium - optimize availability management")
 
-    # ========== EXISTING FEATURE IMPORTANCE SECTION ==========
-    # Feature importance (for tree-based models)
-    st.subheader("Feature Importance Analysis")
-    if st.session_state.best_model_name in ['Random Forest', 'Gradient Boosting']:
-        # Ensure feature_names are available and match model's feature importances
-        if (st.session_state.feature_names and
-            hasattr(st.session_state.best_model, 'feature_importances_') and
-            len(st.session_state.feature_names) == len(st.session_state.best_model.feature_importances_)):
-            
-            importance = st.session_state.best_model.feature_importances_
-            feature_importance = pd.DataFrame({
-                'Feature': st.session_state.feature_names,
-                'Importance': importance
-            }).sort_values('Importance', ascending=False)
-            
-            # Map to display names
-            feature_importance['Feature_Display'] = feature_importance['Feature'].map(feature_display_names).fillna(feature_importance['Feature'])
-            
-            fig_importance = px.bar(feature_importance.head(10),
-                                  x='Importance', y='Feature_Display',
-                                  orientation='h',
-                                  title='Top 10 Feature Importance (Random Forest Model)')
-            st.plotly_chart(fig_importance, use_container_width=True)
-        else:
-            st.warning("Could not display feature importance. Feature names or importance values mismatch.")
-    else:
-        st.info("Feature importance is available only for tree-based models like Random Forest.")
 
     # Business impact metrics
     st.subheader("Business Impact Analysis")
