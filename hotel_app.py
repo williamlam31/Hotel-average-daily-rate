@@ -252,7 +252,6 @@ def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=F
 def main():
     # Header
     st.markdown('<h1 class="main-header">🏨 Hotel Revenue Optimizer</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">AI-Powered Average Daily Rate (ADR) Prediction System</p>', unsafe_allow_html=True)
 
     initialize_session_state()
     
