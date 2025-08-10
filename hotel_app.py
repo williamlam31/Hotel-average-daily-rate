@@ -709,9 +709,27 @@ def show_Performance_Dashboard(data):
         if feature in data.columns:
             corr = data[feature].corr(data['adr'])
             correlations[feature] = corr
-            
     corr_df = pd.DataFrame(list(correlations.items()), columns=['Feature', 'Correlation with ADR'])
+    corr_df = corr_df.sort_values('Correlation with ADR', key=abs, ascending=False)
     
+    # Rename features for better display
+    feature_display_names = {
+        'lead_time': 'Lead Time',
+        'total_nights': 'Total Nights',
+        'total_guests': 'Total Guests',
+        'total_of_special_requests': 'Special Requests',
+        'days_in_waiting_list': 'Days in Waiting List',
+        'arrival_month_numeric': 'Arrival Month'
+    }
+    
+    corr_df['Feature_Display'] = corr_df['Feature'].map(feature_display_names)
+    
+    fig_corr = px.bar(corr_df, x='Correlation with ADR', y='Feature_Display',
+                     orientation='h',
+                     title='Feature Correlation with Average Daily Rate',
+                     color='Correlation with ADR',
+                     color_continuous_scale='RdBu_r')
+    st.plotly_chart(fig_corr, use_container_width=True)   
     # Feature importance insights
     st.write("**Top Predictive Features:**")
     for idx, row in corr_df.head(3).iterrows():
