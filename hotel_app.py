@@ -299,6 +299,42 @@ def initialize_session_state():
         st.error("Error loading or preprocessing data. Please check the data source and code.")
         return
     
+    # Auto-train models if not already trained
+    if not st.session_state.model_trained:
+        with st.spinner("🤖 Training models... This may take a moment on first load."):
+            try:
+                # Remove outliers for better training
+                Q1 = y_train_data.quantile(0.25)
+                Q3 = y_train_data.quantile(0.75)
+                IQR = Q3 - Q1
+                lower_bound = Q1 - 1.5 * IQR
+                upper_bound = Q3 + 1.5 * IQR
+                mask = (y_train_data >= lower_bound) & (y_train_data <= upper_bound)
+                
+                X_clean = X_train_data[mask]
+                y_clean = y_train_data[mask]
+                
+                # Train models
+                results, X_test, y_test, scaler = train_models(X_clean, y_clean)
+                
+                # Update session state
+                st.session_state.model_results = results
+                st.session_state.X_test = X_test
+                st.session_state.y_test = y_test
+                st.session_state.scaler = scaler
+                st.session_state.feature_names = X_clean.columns.tolist()
+                st.session_state.model_trained = True
+                
+                # Find best model
+                best_model_name = min(results.keys(), key=lambda k: results[k]['rmse'])
+                st.session_state.best_model_name = best_model_name
+                st.session_state.best_model = results[best_model_name]['model']
+                st.session_state.use_scaling = results[best_model_name]['use_scaling']
+                
+            except Exception as e:
+                st.error(f"Error training models: {str(e)}")
+                return
+    
     # Page routing (rest remains the same)
     if page == "🏠 Home":
         show_Home(data)
@@ -472,7 +508,6 @@ def show_data_exploration(data):
             y=1.02,
             xanchor="right",
             x=1
-        )
     )
     
     st.plotly_chart(fig_dual, use_container_width=True)
