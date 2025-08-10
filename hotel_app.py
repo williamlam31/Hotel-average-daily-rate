@@ -564,7 +564,6 @@ def show_data_exploration(data):
 
 def show_Average_Daily_Rate(data):
     """Display prediction page"""
-    st.markdown('<h2 class="sub-header">💰 Average Daily Rate</h2>', unsafe_allow_html=True)
     
     st.markdown(
     "<style>" +
@@ -576,7 +575,7 @@ def show_Average_Daily_Rate(data):
     )
 
     
-    st.write("Enter booking details to get an ADR prediction:")
+    st.write("Enter booking details:")
     
     # Input form
     with st.form("prediction_form"):
