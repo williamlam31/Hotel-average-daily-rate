@@ -368,7 +368,7 @@ def show_Home(data):
     
 def show_data_exploration(data):
     """Display data exploration page"""
-    st.markdown('<h2 class="sub-header">📊 Data Exploration</h2>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">📊 Data Exploration</h1>', unsafe_allow_html=True)
     
     # ADR vs Month Analysis
     st.subheader("Average Daily Rate (ADR) by Month")
@@ -566,6 +566,7 @@ def show_data_exploration(data):
 
 def show_Average_Daily_Rate(data):
     """Display prediction page"""
+    st.markdown('<h1 class="main-header">"💰 Average Daily Rate"</h1>', unsafe_allow_html=True)
     
     st.markdown(
     "<style>" +
@@ -658,7 +659,7 @@ def show_Average_Daily_Rate(data):
             st.error(f"Error making prediction: {str(e)}")
 
 def show_Performance_Dashboard(data):
-    st.markdown('<h2 class="sub-header">📈 Performance Dashboard</h2>', unsafe_allow_html=True)
+    st.markdown('<h1 class="header">📈 Performance Dashboard</h1>', unsafe_allow_html=True)
 
     
     # Focus on the 6 key features used in the model
