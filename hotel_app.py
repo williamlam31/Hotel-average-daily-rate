@@ -251,8 +251,7 @@ def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=F
         return input_df
 def main():
     # Header
-    st.markdown('<h1 class="main-header">🏨 Hotel Average Daily Rate</h1>', unsafe_allow_html=True)
-
+    
     initialize_session_state()    
 
 def initialize_session_state():
