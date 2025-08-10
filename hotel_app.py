@@ -351,22 +351,6 @@ def initialize_session_state():
 def show_Home(data):
     """Display the home page"""
     
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric("Total Bookings", f"{len(data):,}")
-    
-    with col2:
-        avg_adr = data['adr'].mean()
-        st.metric("Average Daily Rate", f"${avg_adr:.2f}")
-    
-    with col3:
-        if 'total_guests' in data.columns:
-            total_guests = data['total_guests'].sum()
-        else:
-            total_guests = (data['adults'] + data['children'] + data['babies']).sum()
-        st.metric("Total Guests", f"{total_guests:.2f}")
-    
     st.markdown("""
     ### 🎯 Business Problem
     
