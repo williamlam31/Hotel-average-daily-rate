@@ -566,7 +566,7 @@ def show_data_exploration(data):
 
 def show_Average_Daily_Rate(data):
     """Display prediction page"""
-    st.markdown('<h1 class="main-header">"💰 Average Daily Rate"</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">💰 Average Daily Rate </h1>', unsafe_allow_html=True)
     
     st.markdown(
     "<style>" +
@@ -659,7 +659,7 @@ def show_Average_Daily_Rate(data):
             st.error(f"Error making prediction: {str(e)}")
 
 def show_Performance_Dashboard(data):
-    st.markdown('<h1 class="header">📈 Performance Dashboard</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">📈 Performance Dashboard</h1>', unsafe_allow_html=True)
 
     
     # Focus on the 6 key features used in the model
@@ -739,14 +739,14 @@ def show_Performance_Dashboard(data):
         st.write(f"• **{row['Feature_Display']}**: {correlation_strength} {direction.lower()} correlation ({row['Correlation with ADR']:.3f})")
     
     # SECTION 3: Business Intelligence
-    st.write("### 🎯 Business Intelligence")
+    st.write("### Business Intelligence")
     
     # Lead time insights
     avg_lead_time = data['lead_time'].mean()
     high_lead_time_adr = data[data['lead_time'] > avg_lead_time]['adr'].mean()
     low_lead_time_adr = data[data['lead_time'] <= avg_lead_time]['adr'].mean()
     
-    st.write("📅 **Booking Behavior:**")
+    st.write("**Booking Behavior:**")
     st.write(f"• Average lead time: {avg_lead_time:.0f} days")
     st.write(f"• High lead time bookings (>{avg_lead_time:.0f} days): ${high_lead_time_adr:.2f} avg ADR")
     st.write(f"• Low lead time bookings (≤{avg_lead_time:.0f} days): ${low_lead_time_adr:.2f} avg ADR")
@@ -761,7 +761,7 @@ def show_Performance_Dashboard(data):
     
     # Special requests impact
     special_req_correlation = data['total_of_special_requests'].corr(data['adr'])
-    st.write("🛎️ **Service Level:**")
+    st.write("**Service Level:**")
     st.write(f"• Special requests correlation with ADR: {special_req_correlation:.3f}")
     if special_req_correlation > 0:
         st.write("• Higher service requests typically associated with higher rates")
