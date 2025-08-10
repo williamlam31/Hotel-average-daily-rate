@@ -830,56 +830,6 @@ def show_Performance_Dashboard(data):
                f'R²: {results[st.session_state.best_model_name]["r2"]:.3f}</div>',
                unsafe_allow_html=True)
 
-    # Feature importance (for tree-based models)
-    st.subheader("Feature Importance Analysis")
-
-    if st.session_state.best_model_name in ['Random Forest', 'Gradient Boosting']:
-        # Ensure feature_names are available and match model's feature importances
-        if (st.session_state.feature_names and
-            hasattr(st.session_state.best_model, 'feature_importances_') and
-            len(st.session_state.feature_names) == len(st.session_state.best_model.feature_importances_)):
-
-            importance = st.session_state.best_model.feature_importances_
-            feature_importance = pd.DataFrame({
-                'Feature': st.session_state.feature_names,
-                'Importance': importance
-            }).sort_values('Importance', ascending=False)
-
-            fig_importance = px.bar(feature_importance.head(10),
-                                  x='Importance', y='Feature',
-                                  orientation='h',
-                                  title='Top 10 Feature Importance')
-            st.plotly_chart(fig_importance, use_container_width=True)
-
-        else:
-            st.warning("Could not display feature importance. Feature names or importance values mismatch.")
-
-    else:
-        st.info("Feature importance is available only for tree-based models.")
-
-    # Business impact metrics
-    st.subheader("Business Impact Analysis")
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        best_r2 = results[st.session_state.best_model_name]['r2']
-        st.metric("Model Accuracy (R²)", f"{best_r2:.3f}")
-
-    with col2:
-        best_rmse = results[st.session_state.best_model_name]['rmse']
-        st.metric("Prediction Error (RMSE)", f"${best_rmse:.2f}")
-
-    with col3:
-        avg_adr = data['adr'].mean()
-        error_percentage = (best_rmse / avg_adr) * 100 if avg_adr > 0 else 0  # Handle division by zero
-        st.metric("Error Percentage", f"{error_percentage:.1f}%")
-
-    with col4:
-        # Estimate potential revenue impact
-        potential_improvement = best_r2 * avg_adr * 0.05 if avg_adr > 0 else 0  # Assume 5% improvement potential
-        st.metric("Revenue Optimization (Est.)", f"${potential_improvement:.2f}")
-
 
 
 # Run the main function
