@@ -251,7 +251,7 @@ def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=F
         return input_df
 def main():
     # Header
-    st.markdown('<h1 class="main-header">🏨 Hotel Revenue Optimizer</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">🏨 Hotel Average Daily Rate</h1>', unsafe_allow_html=True)
 
     initialize_session_state()    
 
@@ -284,7 +284,7 @@ def initialize_session_state():
     # Navigation buttons
     if st.sidebar.button("🏠 Home", use_container_width=True):
         st.session_state.current_page = "🏠 Home"
-    if st.sidebar.button("💰 Price Prediction", use_container_width=True):  # MOVED UP
+    if st.sidebar.button("💰 Average Daily Rate", use_container_width=True):  # MOVED UP
         st.session_state.current_page = "💰 Price Prediction"
     if st.sidebar.button("📊 Data Exploration", use_container_width=True):  # MOVED DOWN
         st.session_state.current_page = "📊 Data Exploration"
@@ -340,12 +340,12 @@ def initialize_session_state():
     # Page routing (rest remains the same)
     if page == "🏠 Home":
         show_Home(data)
-    elif page == "💰 Price Prediction":
+    elif page == "💰 Average Daily Rate":
         show_Price_Prediction(data)
-    elif page == "📊 Data Exploration":
-        show_data_exploration(data)
     elif page == "📈 Performance Dashboard":
         show_Performance_Dashboard(data)
+    elif page == "📊 Data Exploration":
+        show_data_exploration(data)
     
 
 def show_Home(data):
@@ -359,10 +359,11 @@ def show_Home(data):
     
     ### 🔍 Page Breakdown
     
-    - **Price Prediction**: Average Daily Rate estimate
-    - **Data Exploration**: Key insights from analysis
+    - **Average Daily Rate**: Average Daily Rate estimate
     - **Performance Dashboard**: Key metrics and visualiztions
+    - **Data Exploration**: Key insights from analysis
     """)
+    
 def show_data_exploration(data):
     """Display data exploration page"""
     st.markdown('<h2 class="sub-header">📊 Data Exploration</h2>', unsafe_allow_html=True)
@@ -561,7 +562,7 @@ def show_data_exploration(data):
     
    
 
-def show_Price_Prediction(data):
+def show_Average_Daily_Rate(data):
     """Display prediction page"""
     st.markdown('<h2 class="sub-header">💰 Price Prediction</h2>', unsafe_allow_html=True)
     
