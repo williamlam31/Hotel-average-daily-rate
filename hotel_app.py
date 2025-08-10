@@ -350,6 +350,9 @@ def initialize_session_state():
 def show_Home(data):
     """Display the home page"""
     
+    st.markdown('<h1 class="main-header">🏨 Hotel Average Daily Rate</h1>', unsafe_allow_html=True)
+
+    
     st.markdown("""
     ### 🎯 Business Problem
     
