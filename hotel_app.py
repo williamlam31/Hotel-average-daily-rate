@@ -408,9 +408,112 @@ def show_data_exploration(data):
         st.metric("Lowest Month", low_month, f"${low_adr:.2f}")
     
     # ADR by Hotel Type
-    st.subheader("ADR Analysis by Hotel Type")
-    fig_hotel = px.box(data, x='hotel', y='adr', title='ADR by Hotel Type')
-    st.plotly_chart(fig_hotel, use_container_width=True)
+    st.subheader("Lead Time vs ADR by Month")
+    
+    # Create lead time categories for better visualization
+    data_viz = data.copy()
+    data_viz['lead_time_category'] = pd.cut(data_viz['lead_time'], 
+                                           bins=[0, 30, 90, 180, 365, float('inf')], 
+                                           labels=['0-30 days', '31-90 days', '91-180 days', '181-365 days', '365+ days'])
+    
+    # Create month order for proper sorting
+    month_order = ['January', 'February', 'March', 'April', 'May', 'June',
+                   'July', 'August', 'September', 'October', 'November', 'December']
+    
+    data_viz['arrival_date_month'] = pd.Categorical(data_viz['arrival_date_month'], 
+                                                   categories=month_order, 
+                                                   ordered=True)
+    
+    # Create the 3D visualization
+    fig_3d = go.Figure()
+    
+    # Add scatter plot with lead time as size and month as color
+    for i, month in enumerate(month_order):
+        month_data = data_viz[data_viz['arrival_date_month'] == month]
+        if not month_data.empty:
+            # Sample data if too large for performance
+            if len(month_data) > 1000:
+                month_data = month_data.sample(n=1000, random_state=42)
+            
+            fig_3d.add_trace(go.Scatter(
+                x=month_data['lead_time'],
+                y=month_data['adr'],
+                mode='markers',
+                name=month,
+                marker=dict(
+                    size=6,
+                    opacity=0.6,
+                    color=i,
+                    colorscale='Viridis',
+                    showscale=False
+                ),
+                hovertemplate='<b>%{fullData.name}</b><br>' +
+                             'Lead Time: %{x} days<br>' +
+                             'ADR: $%{y:.2f}<extra></extra>'
+            ))
+    
+    fig_3d.update_layout(
+        title='Lead Time vs ADR by Month',
+        xaxis_title='Lead Time (Days)',
+        yaxis_title='ADR ($)',
+        template='plotly_white',
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        )
+    )
+    
+    st.plotly_chart(fig_3d, use_container_width=True)
+    
+    # Add summary insights
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        avg_lead_time = data['lead_time'].mean()
+        st.metric("Avg Lead Time", f"{avg_lead_time:.0f} days")
+    
+    with col2:
+        # Find correlation between lead time and ADR
+        correlation = data['lead_time'].corr(data['adr'])
+        st.metric("Lead Time-ADR Correlation", f"{correlation:.3f}")
+    
+    with col3:
+        # Find month with highest average lead time
+        lead_by_month = data.groupby('arrival_date_month')['lead_time'].mean()
+        highest_lead_month = lead_by_month.idxmax()
+        st.metric("Highest Lead Time Month", highest_lead_month)
+    
+    # Correlation heatmap
+    st.subheader("Feature Correlations")
+    numeric_cols = data.select_dtypes(include=[np.number]).columns
+    corr_matrix = data[numeric_cols].corr()
+    
+    fig_corr = px.imshow(corr_matrix,
+                        title='Correlation Matrix',
+                        color_continuous_scale='RdBu_r',
+                        aspect='auto')
+    st.plotly_chart(fig_corr, use_container_width=True)
+    
+    # Key insights
+    st.subheader("Key Insights")
+    avg_adr = data['adr'].mean()
+    resort_adr = data[data['hotel'] == 'Resort Hotel']['adr'].mean()
+    city_adr = data[data['hotel'] == 'City Hotel']['adr'].mean()
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("Overall Avg ADR", f"${avg_adr:.2f}")
+    
+    with col2:
+        st.metric("Resort Hotel ADR", f"${resort_adr:.2f}")
+    
+    with col3:
+        st.metric("City Hotel ADR", f"${city_adr:.2f}")
     
     # Correlation heatmap
     st.subheader("Feature Correlations")
@@ -675,7 +778,6 @@ def show_Performance_Dashboard(data):
 
     with col4:
         # Estimate potential revenue impact
-        # This is a simplified estimation and might need refinement based on business logic
         potential_improvement = best_r2 * avg_adr * 0.05 if avg_adr > 0 else 0  # Assume 5% improvement potential
         st.metric("Revenue Optimization (Est.)", f"${potential_improvement:.2f}")
 
