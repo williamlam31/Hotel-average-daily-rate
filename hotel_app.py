@@ -509,7 +509,7 @@ def show_data_exploration(data):
             xanchor="right",
             x=1
         )
-    
+    )
     st.plotly_chart(fig_dual, use_container_width=True)
     
     # Add summary insights
