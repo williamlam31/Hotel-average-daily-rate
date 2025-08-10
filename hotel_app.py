@@ -788,60 +788,8 @@ def show_Performance_Dashboard(data):
     else:
         st.info("• Last-minute bookings command premium - optimize availability management")
 
-
-    # Business impact metrics
-    st.subheader("Business Impact Analysis")
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        best_r2 = results[st.session_state.best_model_name]['r2']
-        st.metric("Model Accuracy (R²)", f"{best_r2:.3f}")
-
-    with col2:
-        best_rmse = results[st.session_state.best_model_name]['rmse']
-        st.metric("Prediction Error (RMSE)", f"${best_rmse:.2f}")
-
-    with col3:
-        avg_adr = data['adr'].mean()
-        error_percentage = (best_rmse / avg_adr) * 100 if avg_adr > 0 else 0
-        st.metric("Error Percentage", f"{error_percentage:.1f}%")
-
-    with col4:
-        # Estimate potential revenue impact
-        potential_improvement = best_r2 * avg_adr * 0.05 if avg_adr > 0 else 0
-        st.metric("Revenue Optimization (Est.)", f"${potential_improvement:.2f}")
-        
-    # Model interpretation for business stakeholders
-    st.subheader("📈 Model Business Interpretation")
     
-    col1, col2 = st.columns(2)
     
-    with col1:
-        st.write("**What this model tells us:**")
-        accuracy_interpretation = ""
-        if best_r2 >= 0.8:
-            accuracy_interpretation = "Excellent - Model explains 80%+ of price variation"
-        elif best_r2 >= 0.6:
-            accuracy_interpretation = "Good - Model captures most pricing patterns"
-        elif best_r2 >= 0.4:
-            accuracy_interpretation = "Fair - Model identifies key pricing trends"
-        else:
-            accuracy_interpretation = "Basic - Model provides general pricing guidance"
-            
-        st.info(f"• **Model Reliability**: {accuracy_interpretation}")
-        st.info(f"• **Typical Prediction Error**: ±${best_rmse:.2f}")
-    
-    with col2:
-        st.write("**Recommended use cases:**")
-        if best_r2 >= 0.6:
-            st.success("✅ Strategic pricing decisions")
-            st.success("✅ Revenue forecasting")
-            st.success("✅ Market positioning")
-        elif best_r2 >= 0.4:
-            st.warning("⚠️ General pricing guidance only")
-            st.warning("⚠️ Supplement with market research")
-        else:
-            st.error("❌ Requires model improvement for business use")
             
 # Run the main function
 if __name__ == "__main__":
