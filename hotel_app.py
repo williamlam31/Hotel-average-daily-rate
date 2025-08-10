@@ -496,7 +496,7 @@ def show_data_exploration(data):
         st.metric("Highest Lead Time Month", highest_lead_month)
     
     # Correlation heatmap
-st.subheader("Feature Correlations")
+    st.subheader("Feature Correlations")
     # Select only the specified features for correlation analysis
     selected_features = [
         'lead_time', 'total_nights', 'total_guests', 
