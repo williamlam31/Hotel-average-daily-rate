@@ -767,25 +767,6 @@ def show_Performance_Dashboard(data):
     else:
         st.write("• Special requests show minimal impact on pricing")
     
-    # Recommendations
-    st.write("💡 **Pricing Strategy Recommendations:**")
-    
-    # Find the strongest predictor
-    strongest_predictor = corr_df.iloc[0]
-    if abs(strongest_predictor['Correlation with ADR']) > 0.3:
-        st.success(f"• Focus on optimizing **{strongest_predictor['Feature_Display']}** - strongest price predictor")
-    
-    # Seasonal recommendations
-    peak_months = data.groupby('arrival_date_month')['adr'].mean().nlargest(3).index.tolist()
-    st.info(f"• Implement dynamic pricing for peak months: {', '.join(peak_months)}")
-    
-    # Lead time strategy
-    if high_lead_time_adr > low_lead_time_adr:
-        st.info("• Consider early booking discounts to capture price-sensitive advance planners")
-    else:
-        st.info("• Last-minute bookings command premium - optimize availability management")
-
-    
     
             
 # Run the main function
