@@ -709,7 +709,8 @@ def show_Performance_Dashboard(data):
         if feature in data.columns:
             corr = data[feature].corr(data['adr'])
             correlations[feature] = corr
-    
+            
+    corr_df = pd.DataFrame(list(correlations.items()), columns=['Feature', 'Correlation with ADR'])
     
     # Feature importance insights
     st.write("**Top Predictive Features:**")
