@@ -663,18 +663,6 @@ def show_Performance_Dashboard(data):
     st.subheader("Model Performance Summary")
     results = st.session_state.model_results
 
-    # Create performance comparison chart
-    perf_data = []
-    for name, result in results.items():
-        perf_data.append({
-            'Model': name,
-            'MAE': result['mae'],
-            'RMSE': result['rmse'],
-            'R²': result['r2']
-        })
-
-    perf_df = pd.DataFrame(perf_data)
-
     # Performance visualization
     col1, col2 = st.columns(2)
 
