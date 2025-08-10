@@ -663,21 +663,6 @@ def show_Performance_Dashboard(data):
     st.subheader("Model Performance Summary")
     results = st.session_state.model_results
 
-    # Performance visualization
-    col1, col2 = st.columns(2)
-
-    with col1:
-        fig_rmse = px.bar(perf_df, x='Model', y='RMSE',
-                         title='Root Mean Square Error by Model',
-                         color='RMSE', color_continuous_scale='Viridis_r')
-        st.plotly_chart(fig_rmse, use_container_width=True)
-
-    with col2:
-        fig_r2 = px.bar(perf_df, x='Model', y='R²',
-                       title='R² Score by Model',
-                       color='R²', color_continuous_scale='Viridis')
-        st.plotly_chart(fig_r2, use_container_width=True)
-
     # Detailed metrics table
     st.subheader("Detailed Performance Metrics")
     st.dataframe(perf_df.round(4))
