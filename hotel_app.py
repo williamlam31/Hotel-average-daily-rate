@@ -144,6 +144,16 @@ def train_models(X, y):
     
     return results, X_test, y_test, scaler
 
+def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=False):
+    input_df = pd.DataFrame([input_data])
+    input_df = input_df.reindex(columns=feature_names, fill_value=0)
+    
+    if use_scaling and scaler:
+        input_scaled = scaler.transform(input_df)
+        return input_scaled
+    else:
+        return input_df
+        
 def get_season(month):
     if month in [12, 1, 2]:
         return 'Winter'
