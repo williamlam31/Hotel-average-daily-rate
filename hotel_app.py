@@ -175,61 +175,47 @@ def main():
     if st.sidebar.button("Performance Dashboard"):
         st.session_state.current_page = "Performance Dashboard"
     
-    # Get the current page
     page = st.session_state.current_page
     
-    # Load data
-    data, X_train_data, y_train_data = load_data()
+    data = load_data()
     
-    if data is None or X_train_data is None or y_train_data is None:
-        st.error("Error loading or preprocessing data. Please check the data source and code.")
-        return
-    
-    # Auto-train models if not already trained
     if not st.session_state.models_trained:
-        with st.spinner("🤖 Training models... This may take a moment on first load."):
-            try:
-                # Remove outliers for better training
-                Q1 = y_train_data.quantile(0.25)
-                Q3 = y_train_data.quantile(0.75)
-                IQR = Q3 - Q1
-                lower_bound = Q1 - 1.5 * IQR
-                upper_bound = Q3 + 1.5 * IQR
-                mask = (y_train_data >= lower_bound) & (y_train_data <= upper_bound)
-                
-                X_clean = X_train_data[mask]
-                y_clean = y_train_data[mask]
-                
-                # Train models
-                results, X_test, y_test, scaler = train_models(X_clean, y_clean)
-                
-                # Update session state
-                st.session_state.model_results = results
-                st.session_state.X_test = X_test
-                st.session_state.y_test = y_test
-                st.session_state.scaler = scaler
-                st.session_state.feature_names = X_clean.columns.tolist()
-                st.session_state.models_trained = True
-                
-                # Find best model
-                best_model_name = min(results.keys(), key=lambda k: results[k]['rmse'])
-                st.session_state.best_model_name = best_model_name
-                st.session_state.best_model = results[best_model_name]['model']
-                st.session_state.use_scaling = results[best_model_name]['use_scaling']
-                
-            except Exception as e:
-                st.error(f"Error training models: {str(e)}")
-                return
-    
+        with st.spinner("Training models..."):
 
+            selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
+                           'total_of_special_requests', 'total_guests', 'total_nights']
+            
+
+            Q1 = data['adr'].quantile(0.25)
+            Q3 = data['adr'].quantile(0.75)
+            IQR = Q3 - Q1
+            mask = (data['adr'] >= Q1 - 1.5 * IQR) & (data['adr'] <= Q3 + 1.5 * IQR)
+            df_new_processed = data[mask]
+            
+            X = df_new_processed[feature_cols]
+            y = df_new_processed['adr']
+            
+            models, best_name, scaler, X_test, y_test = train_simple_models(X, y)
+            
+      
+            st.session_state.models = models
+            st.session_state.best_model = best_name
+            st.session_state.scaler = scaler
+            st.session_state.feature_names = feature_cols
+            st.session_state.X_test = X_test
+            st.session_state.y_test = y_test
+            st.session_state.models_trained = True
+
+ page = st.session_state.current_page
+    
     if page == "Home":
         show_Home(data)
     elif page == "Average Daily Rate":
         show_Average_Daily_Rate(data)
-    elif page == "Performance Dashboard":
-        show_Performance_Dashboard(data)
-    elif page == "Data Exploration":
-        show_data_exploration(data)
+    elif page == "Data Overview":
+        show_Data_Overview(data)
+    elif page == "Performance":
+        show_Performance()
     
 
 def show_Home(data):
