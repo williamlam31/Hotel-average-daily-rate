@@ -193,11 +193,11 @@ def main():
     if page == "Home":
         show_Home(df_new_encoded)
     elif page == "Average Daily Rate":
-        show_Average_Daily_Rate(df_new_encoded)
+        show_Average_Daily_Rate((df_new_encoded, model, scaler, use_scaling, selected_features)
     elif page == "Data Exploration":
-        show_data_exploration(df_new_encoded)
+        show_data_exploration((df_new_encoded, model, scaler, use_scaling, selected_features)
     elif page == "Performance Dashboard":
-        show_Performance_Dashboard(df_new_encoded)
+        show_Performance_Dashboard(df_new_encoded, model, scaler, use_scaling, selected_features))
     
 
 def show_Home(df_new_encoded):
@@ -417,7 +417,7 @@ def show_data_exploration(data):
     
    
 
-def show_Average_Daily_Rate(data):
+def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features):
     """Display prediction page"""
     st.markdown('<h1 class="main-header">💰 Average Daily Rate </h1>', unsafe_allow_html=True)
     
