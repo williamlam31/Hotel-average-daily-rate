@@ -185,10 +185,10 @@ def main():
     X = df_new_encoded[selected_features]
     y = df_new_encoded['adr']
     models = train_models(X, y)
-        chosen_model = max(models, key=lambda m: models[m]['r2'])
-        model = models[best_model_name]['model']
-        scaler = models[best_model_name]['scaler']
-        use_scaling = models[best_model_name]['use_scaling']
+    chosen_model = max(models, key=lambda m: models[m]['r2'])
+    model = models[chosen_model]['model']
+    scaler = models[chosen_model]['scaler']
+    use_scaling = models[chosen_model]['use_scaling']
                         
     if page == "Home":
         show_Home(df_new_encoded, model, scaler, use_scaling, selected_features)
