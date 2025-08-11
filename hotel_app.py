@@ -182,8 +182,8 @@ def main():
     selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
                            'total_of_special_requests', 'total_guests', 'total_nights']
 
-    X = df_new_processed[selected_features]
-    y = df_new_processed['adr']
+    X = df_new_encoded[selected_features]
+    y = df_new_encoded['adr']
                         
     if page == "Home":
         show_Home(data)
