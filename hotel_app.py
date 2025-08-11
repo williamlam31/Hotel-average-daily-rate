@@ -521,7 +521,7 @@ def show_Performance_Dashboard(data):
         st.metric("Peak ADR", f"${max_adr:.2f}")
     
 
-    st.write("**Seasonal Overview:**")
+    st.write("###Seasonal Overview:###")
     monthly_adr = data.groupby('arrival_date_month')['adr'].mean().round(2)
     
     peak_season = str(monthly_adr.idxmax())
@@ -566,13 +566,13 @@ def show_Performance_Dashboard(data):
     high_lead_time_adr = data[data['lead_time'] > avg_lead_time]['adr'].mean()
     low_lead_time_adr = data[data['lead_time'] <= avg_lead_time]['adr'].mean()
     
-    st.write("**Booking Lead Time:**")
+    st.write("###Booking Lead Time:###")
     st.write(f"• Average lead time: {avg_lead_time:.0f} days")
     st.write(f"• High lead time bookings (>{avg_lead_time:.0f} days): ${high_lead_time_adr:.2f} avg ADR")
     st.write(f"• Low lead time bookings (≤{avg_lead_time:.0f} days): ${low_lead_time_adr:.2f} avg ADR")
     
 
-    st.write(" **Party Size:**")
+    st.write(" ###Party Size:###")
     avg_guests = data['total_guests'].mean()
     avg_nights = data['total_nights'].mean()
     
