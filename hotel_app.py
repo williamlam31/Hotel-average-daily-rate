@@ -197,7 +197,7 @@ def main():
     elif page == "Data Exploration":
         show_data_exploration(df_new_encoded, model, scaler, use_scaling, selected_features)
     elif page == "Performance Dashboard":
-        show_Performance_Dashboard(df_new_encoded, model, scaler, use_scaling, selected_features))
+        show_Performance_Dashboard(df_new_encoded, model, scaler, use_scaling, selected_features)
     
 
 def show_Home(df_new_encoded):
