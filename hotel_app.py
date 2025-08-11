@@ -454,7 +454,6 @@ def show_Average_Daily_Rate(data):
     
     if submit_button:
         try:
-            # Prepare input data
             month_mapping = {
                 'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
                 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
@@ -468,8 +467,10 @@ def show_Average_Daily_Rate(data):
                 'total_nights': total_nights,
                 'days_in_waiting_list': days_waiting,
             }
-       
-            # Display prediction
+            input_processed = prepare_input_features(input_data, selected_features, scaler, use_scaling)
+
+            prediction = model.predict(input_processed)[0]
+            
             st.markdown(f"""
             <div style="background-color: #ffffff; color: #000000; padding: 2rem; border-radius: 1rem; border-left: 5px solid #2196f3; margin: 1rem 0;">
                 <h3 style="color: #000000;"> Predicted Average Daily Rate</h3>
