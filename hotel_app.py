@@ -185,7 +185,7 @@ def main():
     X = df_new_encoded[selected_features]
     y = df_new_encoded['adr']
     models = train_models(X, y)
-        best_model_name = max(models, key=lambda m: models[m]['r2'])
+        chosen_model = max(models, key=lambda m: models[m]['r2'])
         model = models[best_model_name]['model']
         scaler = models[best_model_name]['scaler']
         use_scaling = models[best_model_name]['use_scaling']
