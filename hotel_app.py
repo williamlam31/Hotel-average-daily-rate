@@ -206,7 +206,7 @@ def main():
             st.session_state.y_test = y_test
             st.session_state.models_trained = True
 
- page = st.session_state.current_page
+     page = st.session_state.current_page
     
     if page == "Home":
         show_Home(data)
