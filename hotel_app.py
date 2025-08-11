@@ -191,11 +191,11 @@ def main():
         use_scaling = models[best_model_name]['use_scaling']
                         
     if page == "Home":
-        show_Home(df_new_encoded)
+        show_Home(df_new_encoded, model, scaler, use_scaling, selected_features)
     elif page == "Average Daily Rate":
-        show_Average_Daily_Rate((df_new_encoded, model, scaler, use_scaling, selected_features)
+        show_Average_Daily_Rate(df_new_encoded, model, scaler, use_scaling, selected_features)
     elif page == "Data Exploration":
-        show_data_exploration((df_new_encoded, model, scaler, use_scaling, selected_features)
+        show_data_exploration(df_new_encoded, model, scaler, use_scaling, selected_features)
     elif page == "Performance Dashboard":
         show_Performance_Dashboard(df_new_encoded, model, scaler, use_scaling, selected_features))
     
