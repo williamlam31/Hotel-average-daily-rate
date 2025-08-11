@@ -176,16 +176,16 @@ def main():
     y = df_new_encoded['adr']
                         
     if page == "Home":
-        show_Home(data)
+        show_Home(df_new_encoded)
     elif page == "Average Daily Rate":
-        show_Average_Daily_Rate(data)
+        show_Average_Daily_Rate(df_new_encoded)
     elif page == "Data Exploration":
-        show_data_exploration(data)
+        show_data_exploration(df_new_encoded)
     elif page == "Performance Dashboard":
-        show_Performance_Dashboard(data)
+        show_Performance_Dashboard(df_new_encoded)
     
 
-def show_Home(data):
+def show_Home(df_new_encoded):
     """Display the home page"""
     
     st.markdown('<h1 class="main-header"> Hotel Average Daily Rate</h1>', unsafe_allow_html=True)
