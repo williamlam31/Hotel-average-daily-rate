@@ -34,7 +34,7 @@ if 'models_trained' not in st.session_state:
 if 'current_page' not in st.session_state:
     st.session_state.current_page = "Home"
 
-
+@st.cache_data
 def load_data():
     import kagglehub
     from kagglehub import KaggleDatasetAdapter
@@ -186,7 +186,7 @@ def main():
         return
     
     # Auto-train models if not already trained
-    if not st.session_state.model_trained:
+    if not st.session_state.models_trained:
         with st.spinner("🤖 Training models... This may take a moment on first load."):
             try:
                 # Remove outliers for better training
