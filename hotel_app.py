@@ -153,16 +153,6 @@ def get_season(month):
         return 'Summer'
     else:
         return 'Fall'
-
-def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=False):
-    input_df = pd.DataFrame([input_data])
-    input_df = input_df.reindex(columns=feature_names, fill_value=0)
-    
-    if use_scaling and scaler:
-        input_scaled = scaler.transform(input_df)
-        return input_scaled
-    else:
-        return input_df
         
 def main():
     
@@ -177,7 +167,7 @@ def main():
     
     page = st.session_state.current_page
     
-    data = load_data()
+    df_new_encoded = load_data()
     
     selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
                            'total_of_special_requests', 'total_guests', 'total_nights']
@@ -198,16 +188,16 @@ def main():
 def show_Home(data):
     """Display the home page"""
     
-    st.markdown('<h1 class="main-header">🏨 Hotel Average Daily Rate</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header"> Hotel Average Daily Rate</h1>', unsafe_allow_html=True)
 
     
     st.markdown("""
-    ### 🎯 Business Problem
+    ### Business Problem
     
     Hotel prices are dyanmic and influenced by factors such as lead time and seasonality. Since the hospitality industry is very competitive, this AI tool is 
     to assist the hotel in determining an optimal rate that will attract guests and improve their financial outlook.
     
-    ### 🔍 Page Breakdown
+    ### Explanation of Side Pages
     
     - **Average Daily Rate**: Average Daily Rate estimate
     - **Performance Dashboard**: Key metrics and visualiztions
