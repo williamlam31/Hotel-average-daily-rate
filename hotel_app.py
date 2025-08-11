@@ -122,6 +122,7 @@ def train_models(X, y):
         'r2': r2_lr,
         'predictions': y_pred_linear_regression,
         'use_scaling': True
+        'scaler': scaler
     }
     
     # Random Forest
@@ -140,6 +141,7 @@ def train_models(X, y):
         'r2': r2_rf,
         'predictions': y_pred_random_forest,
         'use_scaling': False
+        'scaler': None
     }
     
     return results
