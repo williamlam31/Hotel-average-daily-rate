@@ -179,7 +179,7 @@ def main():
     
     data = load_data()
     
-        selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
+    selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
                            'total_of_special_requests', 'total_guests', 'total_nights']
 
             X = df_new_processed[selected_features]
