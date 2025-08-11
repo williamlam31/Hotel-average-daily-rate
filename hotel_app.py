@@ -35,8 +35,7 @@ if 'current_page' not in st.session_state:
     st.session_state.current_page = "Home"
 
 
-@st.cache_data
-def load_and_preprocess_data():
+def load():
     import kagglehub
     from kagglehub import KaggleDatasetAdapter
     
@@ -46,24 +45,23 @@ def load_and_preprocess_data():
         "jessemostipak/hotel-booking-demand",
         "hotel_bookings.csv")
     
-    # Data preprocessing
     df_new = df.copy()
-    
-    # Handle missing values
+
+    #Replacing Null values with 0 for numerical and Unknown for Categorical
     df_new['children'].fillna(0, inplace=True)
     df_new['country'].fillna('Unknown', inplace=True)
 
-    # Remove rows columns with null values
+    #Dropping Duplicates
     df_new.drop_duplicates(inplace = True)
     df_new.drop(['agent', 'company'], axis=1, inplace=True)
     df_new['reservation_status_date'] = df_new['reservation_status_date'].astype(str)
     df_new.drop_duplicates(inplace = True)
-    
-    # Create derived features
+
+    #New Features
     df_new['total_nights'] = df_new['stays_in_weekend_nights'] + df_new['stays_in_week_nights']
     df_new['total_guests'] = df_new['adults'] + df_new['children'] + df_new['babies']
     
-    # Month encoding and season creation
+    # Month Mapping
     month_assignment = {'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
                        'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12}
     df_new['arrival_month_numeric'] = df_new['arrival_date_month'].map(month_assignment)
@@ -80,33 +78,28 @@ def load_and_preprocess_data():
     
     df_new['arrival_season'] = df_new['arrival_month_numeric'].apply(get_season)
     
-    # Drop reservation_status_date if it exists
-    if 'reservation_status_date' in df_new.columns:
-        df_new = df_new.drop(['reservation_status_date'], axis=1)
-    
-    # Encode categorical variables for the final model
-    categorical_columns_final = ['hotel', 'meal', 'country', 'market_segment', 'distribution_channel',
+    # One-Hot Encoding
+    categorical_features = ['hotel', 'meal', 'country', 'market_segment', 'distribution_channel',
                                'reserved_room_type', 'assigned_room_type', 'deposit_type', 'customer_type', 
                                'arrival_season', 'arrival_date_month', 'reservation_status']
     
     df_new_encoded = pd.get_dummies(df_new, columns=categorical_columns_final, drop_first=True)
+
     
-    # Filter relevant columns for the model input, ensuring they exist
-    model_features = [
+    numerical_features = [
         'lead_time', 'arrival_month_numeric',
         'days_in_waiting_list', 'total_of_special_requests', 'total_guests', 'total_nights']
     
    
-    X = df_new[model_features]
+    X = df_new[numerical_features]
     y = df_new_encoded['adr']
     
-    return df_new, X, y  # Return original df_new for data exploration, and X, y for training
+    return df_new_encoded, X, y
 
 def train_models(X, y):
-    """Trains multiple regression models and evaluates their performance."""
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
-    # Scale features
+    # Standard Scaling
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
@@ -115,7 +108,7 @@ def train_models(X, y):
     
     # Linear Regression
     linear_regression = LinearRegression()
-    linear_regression.fit(X_train_scaled, y_train)  # Use scaled data for Linear Regression
+    linear_regression.fit(X_train_scaled, y_train) 
     y_pred_linear_regression = linear_regression.predict(X_test_scaled)
     
     mae_lr = mean_absolute_error(y_test, y_pred_linear_regression)
@@ -133,7 +126,7 @@ def train_models(X, y):
     
     # Random Forest
     random_forest = RandomForestRegressor(n_estimators=150, random_state=42, n_jobs=-1)
-    random_forest.fit(X_train, y_train)  # Use unscaled data for Random Forest
+    random_forest.fit(X_train, y_train) 
     y_pred_random_forest = random_forest.predict(X_test)
     
     mae_rf = mean_absolute_error(y_test, y_pred_random_forest)
@@ -152,7 +145,6 @@ def train_models(X, y):
     return results, X_test, y_test, scaler
 
 def get_season(month):
-    """Helper function to determine season from month"""
     if month in [12, 1, 2]:
         return 'Winter'
     elif month in [3, 4, 5]:
@@ -163,10 +155,7 @@ def get_season(month):
         return 'Fall'
 
 def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=False):
-    """Prepares input data for prediction."""
     input_df = pd.DataFrame([input_data])
-    
-    # Ensure all expected features are present, fill missing with 0
     input_df = input_df.reindex(columns=feature_names, fill_value=0)
     
     if use_scaling and scaler:
@@ -174,46 +163,17 @@ def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=F
         return input_scaled
     else:
         return input_df
+        
 def main():
-    # Header
     
-    initialize_session_state()    
-
-def initialize_session_state():
-    """Initialize all session state variables"""
-    session_vars = {
-        'model_trained': False,
-        'model': None,
-        'scaler': None,
-        'feature_names': None,
-        'model_results': None,
-        'best_model_name': None,
-        'best_model': None,
-        'use_scaling': None,
-        'X_test': None,
-        'y_test': None,
-    }
-    
-    for var, default_value in session_vars.items():
-        if var not in st.session_state:
-            st.session_state[var] = default_value
-    
-    # Sidebar with direct navigation buttons
-    st.sidebar.title("Navigation")
-    
-    # Initialize page in session state if not exists
-    if 'current_page' not in st.session_state:
-        st.session_state.current_page = "🏠 Home"
-    
-    # Navigation buttons
-    if st.sidebar.button("🏠 Home", use_container_width=True):
-        st.session_state.current_page = "🏠 Home"
-    if st.sidebar.button("💰 Average Daily Rate", use_container_width=True):  # MOVED UP
-        st.session_state.current_page = "💰 Average Daily Rate"
-    if st.sidebar.button("📊 Data Exploration", use_container_width=True):  # MOVED DOWN
-        st.session_state.current_page = "📊 Data Exploration"
-    if st.sidebar.button("📈 Performance Dashboard", use_container_width=True):
-        st.session_state.current_page = "📈 Performance Dashboard"
+    if st.sidebar.button("Home"):
+        st.session_state.current_page = "Home"
+    if st.sidebar.button("Average Daily Rate"):
+        st.session_state.current_page = "Average Daily Rate"
+    if st.sidebar.button("Data Exploration"):
+        st.session_state.current_page = "Data" Exploration
+    if st.sidebar.button("Performance Dashboard"):
+        st.session_state.current_page = "Performance Dashboard"
     
     # Get the current page
     page = st.session_state.current_page
@@ -261,14 +221,14 @@ def initialize_session_state():
                 st.error(f"Error training models: {str(e)}")
                 return
     
-    # Page routing (rest remains the same)
-    if page == "🏠 Home":
+
+    if page == "Home":
         show_Home(data)
-    elif page == "💰 Average Daily Rate":
+    elif page == "Average Daily Rate":
         show_Average_Daily_Rate(data)
-    elif page == "📈 Performance Dashboard":
+    elif page == "Performance Dashboard":
         show_Performance_Dashboard(data)
-    elif page == "📊 Data Exploration":
+    elif page == "Data Exploration":
         show_data_exploration(data)
     
 
