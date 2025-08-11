@@ -272,7 +272,7 @@ def show_data_exploration(data):
     
     st.plotly_chart(fig_month, use_container_width=True)
     
-    # Show seasonal insights
+  
     col1, col2 = st.columns(2)
     with col1:
         peak_month = adr_by_month.loc[adr_by_month['mean'].idxmax(), 'arrival_date_month']
@@ -286,26 +286,26 @@ def show_data_exploration(data):
     
     st.subheader("Lead Time and ADR by Month")
     
-    # Create month order for proper sorting
+
     month_order = ['January', 'February', 'March', 'April', 'May', 'June',
                    'July', 'August', 'September', 'October', 'November', 'December']
     
-    # Calculate average lead time and ADR by month
+ 
     monthly_stats = data.groupby('arrival_date_month').agg({
         'lead_time': 'mean',
         'adr': 'mean'
     }).reset_index()
     
-    # Reorder by month
+ 
     monthly_stats['arrival_date_month'] = pd.Categorical(monthly_stats['arrival_date_month'], 
                                                         categories=month_order, 
                                                         ordered=True)
     monthly_stats = monthly_stats.sort_values('arrival_date_month')
     
-    # Create dual-axis chart
+
     fig_dual = go.Figure()
     
-    # Add Lead Time bars
+
     fig_dual.add_trace(go.Bar(
         x=monthly_stats['arrival_date_month'],
         y=monthly_stats['lead_time'],
@@ -316,7 +316,7 @@ def show_data_exploration(data):
         hovertemplate='<b>%{x}</b><br>Lead Time: %{y:.0f} days<extra></extra>'
     ))
     
-    # Add ADR line on secondary y-axis
+
     fig_dual.add_trace(go.Scatter(
         x=monthly_stats['arrival_date_month'],
         y=monthly_stats['adr'],
@@ -328,7 +328,7 @@ def show_data_exploration(data):
         hovertemplate='<b>%{x}</b><br>ADR: $%{y:.2f}<extra></extra>'
     ))
     
-    # Update layout with dual y-axes
+
     fig_dual.update_layout(
         title='Lead Time (Days) and ADR ($) by Month',
         xaxis_title='Month',
@@ -355,7 +355,7 @@ def show_data_exploration(data):
     )
     st.plotly_chart(fig_dual, use_container_width=True)
     
-    # Add summary insights
+
     col1, col2, col3 = st.columns(3)
     
     with col1:
@@ -363,19 +363,19 @@ def show_data_exploration(data):
         st.metric("Avg Lead Time", f"{avg_lead_time:.0f} days")
     
     with col2:
-        # Find correlation between lead time and ADR
+
         correlation = data['lead_time'].corr(data['adr'])
         st.metric("Lead Time-ADR Correlation", f"{correlation:.3f}")
     
     with col3:
-        # Find month with highest average lead time
+ 
         lead_by_month = data.groupby('arrival_date_month')['lead_time'].mean()
         highest_lead_month = lead_by_month.idxmax()
         st.metric("Highest Lead Time Month", highest_lead_month)
     
-    # Correlation heatmap
+
     st.subheader("Feature Correlations")
-    # Select only the specified features for correlation analysis
+
     selected_features = [
         'lead_time', 'total_nights', 'total_guests', 
         'total_of_special_requests', 'days_in_waiting_list', 
