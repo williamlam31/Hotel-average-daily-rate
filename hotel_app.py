@@ -209,7 +209,7 @@ def main():
                 st.session_state.y_test = y_test
                 st.session_state.scaler = scaler
                 st.session_state.feature_names = X_clean.columns.tolist()
-                st.session_state.model_trained = True
+                st.session_state.models_trained = True
                 
                 # Find best model
                 best_model_name = min(results.keys(), key=lambda k: results[k]['rmse'])
