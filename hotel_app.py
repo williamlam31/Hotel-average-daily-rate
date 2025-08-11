@@ -193,7 +193,7 @@ def main():
     use_scaling = models[chosen_model]['use_scaling']
                         
     if page == "Home":
-        show_Home(df_new_encoded, model, scaler, use_scaling, selected_features)
+        show_Home(df_new_encoded)
     elif page == "Average Daily Rate":
         show_Average_Daily_Rate(df_new_encoded, model, scaler, use_scaling, selected_features)
     elif page == "Data Exploration":
