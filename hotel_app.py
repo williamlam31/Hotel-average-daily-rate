@@ -35,7 +35,7 @@ if 'current_page' not in st.session_state:
     st.session_state.current_page = "Home"
 
 
-def load():
+def load_data():
     import kagglehub
     from kagglehub import KaggleDatasetAdapter
     
@@ -83,7 +83,7 @@ def load():
                                'reserved_room_type', 'assigned_room_type', 'deposit_type', 'customer_type', 
                                'arrival_season', 'arrival_date_month', 'reservation_status']
     
-    df_new_encoded = pd.get_dummies(df_new, columns=categorical_columns_final, drop_first=True)
+    df_new_encoded = pd.get_dummies(df_new, columns=categorical_features, drop_first=True)
 
     
     numerical_features = [
@@ -179,7 +179,7 @@ def main():
     page = st.session_state.current_page
     
     # Load data
-    data, X_train_data, y_train_data = load()
+    data, X_train_data, y_train_data = load_data()
     
     if data is None or X_train_data is None or y_train_data is None:
         st.error("Error loading or preprocessing data. Please check the data source and code.")
