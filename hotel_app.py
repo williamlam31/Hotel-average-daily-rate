@@ -524,8 +524,8 @@ def show_Performance_Dashboard(data):
     st.write("**Seasonal Overview:**")
     monthly_adr = data.groupby('arrival_date_month')['adr'].mean().round(2)
     
-    peak_season = monthly_adr.idxmax()
-    slow_season = monthly_adr.idxmin()
+    peak_season = str(monthly_adr.idxmax())
+    slow_season = str(monthly_adr.idxmin())
     
     col1, col2 = st.columns(2)
     with col1:
