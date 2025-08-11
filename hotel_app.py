@@ -179,7 +179,7 @@ def main():
     page = st.session_state.current_page
     
     # Load data
-    data, X_train_data, y_train_data = load_and_preprocess_data()
+    data, X_train_data, y_train_data = load()
     
     if data is None or X_train_data is None or y_train_data is None:
         st.error("Error loading or preprocessing data. Please check the data source and code.")
