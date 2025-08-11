@@ -203,7 +203,6 @@ def main():
     
 
 def show_Home(df_new_encoded):
-    """Display the home page"""
     
     st.markdown('<h1 class="main-header"> Hotel Average Daily Rate</h1>', unsafe_allow_html=True)
 
@@ -222,27 +221,27 @@ def show_Home(df_new_encoded):
     """)
     
 def show_data_exploration(data):
-    """Display data exploration page"""
-    st.markdown('<h1 class="main-header">📊 Data Exploration</h1>', unsafe_allow_html=True)
+
+    st.markdown('<h1 class="main-header"> Data Exploration</h1>', unsafe_allow_html=True)
     
-    # ADR vs Month Analysis
+
     st.subheader("Average Daily Rate (ADR) by Month")
     
-    # Create month order for proper sorting
+
     month_order = ['January', 'February', 'March', 'April', 'May', 'June',
                    'July', 'August', 'September', 'October', 'November', 'December']
     
-    # Calculate average ADR by month
+
     adr_by_month = data.groupby('arrival_date_month')['adr'].agg(['mean', 'median', 'std']).reset_index()
     adr_by_month['arrival_date_month'] = pd.Categorical(adr_by_month['arrival_date_month'], 
                                                         categories=month_order, 
                                                         ordered=True)
     adr_by_month = adr_by_month.sort_values('arrival_date_month')
     
-    # Create the visualization
+
     fig_month = go.Figure()
     
-    # Add average ADR line
+
     fig_month.add_trace(go.Scatter(
         x=adr_by_month['arrival_date_month'],
         y=adr_by_month['mean'],
@@ -252,7 +251,7 @@ def show_data_exploration(data):
         marker=dict(size=8)
     ))
     
-    # Add median ADR line
+
     fig_month.add_trace(go.Scatter(
         x=adr_by_month['arrival_date_month'],
         y=adr_by_month['median'],
@@ -262,7 +261,7 @@ def show_data_exploration(data):
         marker=dict(size=6)
     ))
     
-    # Update layout
+
     fig_month.update_layout(
         title='Average Daily Rate by Month',
         xaxis_title='Month',
@@ -383,11 +382,11 @@ def show_data_exploration(data):
         'arrival_month_numeric', 'adr'
     ]
     
-    # Filter to only include features that exist in the data
+    
     available_features = [col for col in selected_features if col in data.columns]
     corr_matrix = data[available_features].corr()
     
-    # Create custom labels for better readability
+
     feature_labels = {
         'lead_time': 'Lead Time',
         'total_nights': 'Total Nights',
@@ -398,7 +397,7 @@ def show_data_exploration(data):
         'adr': 'ADR'
     }
     
-    # Rename columns and index for display
+
     corr_display = corr_matrix.copy()
     corr_display.columns = [feature_labels.get(col, col) for col in corr_display.columns]
     corr_display.index = [feature_labels.get(idx, idx) for idx in corr_display.index]
@@ -409,7 +408,7 @@ def show_data_exploration(data):
                         aspect='auto',
                         text_auto=True)
     
-    # Update layout for better readability
+
     fig_corr.update_layout(
         width=600,
         height=500
@@ -420,22 +419,11 @@ def show_data_exploration(data):
    
 
 def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features):
-    """Display prediction page"""
-    st.markdown('<h1 class="main-header">💰 Average Daily Rate </h1>', unsafe_allow_html=True)
-    
-    st.markdown(
-    "<style>" +
-    ".element-container button.step-up { display: none; } " +
-    ".element-container button.step-down { display: none; } " +
-    ".element-container div[data-baseweb] { border-radius: 4px; } "
-    "</style>",
-    unsafe_allow_html=True
-    )
 
+    st.markdown('<h1 class="main-header"> Average Daily Rate </h1>', unsafe_allow_html=True)
     
     st.write("Enter booking details:")
     
-    # Input form
     with st.form("prediction_form"):
         col1, col2, col3 = st.columns(3)
         
@@ -452,7 +440,7 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
             special_requests = st.number_input("Total of Special Requests", value = 0)
             lead_time = st.number_input("Lead Time", value = 0)
         
-        submit_button = st.form_submit_button("🔮 Predict ADR")
+        submit_button = st.form_submit_button("Estimated Average Daily Rate")
     
     if submit_button:
         try:
@@ -480,16 +468,14 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
        
             """, unsafe_allow_html=True)
             
-            # Business insights
             avg_adr = data['adr'].mean()
             if prediction > avg_adr * 1.2:
-                st.success("🔥 **Premium Pricing Opportunity** - This booking commands above-average rates!")
+                st.success("Above Average")
             elif prediction < avg_adr * 0.8:
-                st.info("💡 **Value Pricing** - Consider promotional offers or package deals.")
+                st.info("Below Average")
             else:
-                st.info("📊 **Market Rate** - Pricing aligns with typical market conditions.")
+                st.info("Average")
             
-            # Additional metrics
             col1, col2, col3 = st.columns(3)
             
             with col1:
