@@ -453,11 +453,6 @@ def show_Average_Daily_Rate(data):
                 'total_nights': total_nights,
                 'days_in_waiting_list': days_waiting,
             }
-
-            input_prepared = prepare_input_features(input_data,
-                                      st.session_state.feature_names,
-                                      st.session_state.scaler,
-                                      st.session_state.use_scaling)
             
             model = st.session_state.best_model
             prediction = model.predict(input_prepared)[0]
