@@ -462,8 +462,7 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
             prediction = model.predict(input_processed)[0]
             
             st.markdown(f"""
-            <div style="background-color: #ffffff; color: #000000; padding: 2rem; border-radius: 1rem; border-left: 5px solid #2196f3; margin: 1rem 0;">
-                <h3 style="color: #000000;"> Predicted Average Daily Rate</h3>
+                <h3 style="color: #000000;"> Estimated Average Daily Rate</h3>
                 <h2 style="color: #000000; font-size: 3rem;">${prediction:.2f}</h2>
        
             """, unsafe_allow_html=True)
@@ -496,14 +495,14 @@ def show_Performance_Dashboard(data):
     st.markdown('<h1 class="main-header">📈 Performance Dashboard</h1>', unsafe_allow_html=True)
 
     
-    # Focus on the 6 key features used in the model
+
     key_features = ['lead_time', 'total_nights', 'total_guests', 
                    'total_of_special_requests', 'days_in_waiting_list', 'arrival_month_numeric']
     
-    # SECTION 1: Key Pricing Insights
+
     st.write("### Pricing Patterns")
     
-    # ADR statistics
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         avg_adr = data['adr'].mean()
@@ -521,8 +520,8 @@ def show_Performance_Dashboard(data):
         max_adr = data['adr'].max()
         st.metric("Peak ADR", f"${max_adr:.2f}")
     
-    # Seasonal pricing insights
-    st.write("**Seasonal Pricing Trends:**")
+
+    st.write("**Seasonal Pricing:**")
     monthly_adr = data.groupby('arrival_date_month')['adr'].mean().round(2)
     
     peak_season = monthly_adr.idxmax()
@@ -535,10 +534,10 @@ def show_Performance_Dashboard(data):
     with col2:
         st.info(f"❄️ **Low Season**: {low_season} (${monthly_adr[low_season]:.2f} avg)")
     
-    # SECTION 2: Feature Impact Analysis
+
     st.write("###  Feature Impact Analysis")
     
-    # Calculate correlations with ADR for key features
+
     correlations = {}
     for feature in key_features:
         if feature in data.columns:
@@ -547,7 +546,7 @@ def show_Performance_Dashboard(data):
     corr_df = pd.DataFrame(list(correlations.items()), columns=['Feature', 'Correlation with ADR'])
     corr_df = corr_df.sort_values('Correlation with ADR', key=abs, ascending=False)
     
-    # Rename features for better display
+
     feature_display_names = {
         'lead_time': 'Lead Time',
         'total_nights': 'Total Nights',
