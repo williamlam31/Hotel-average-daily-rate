@@ -197,9 +197,9 @@ def main():
     elif page == "Average Daily Rate":
         show_Average_Daily_Rate(df_new_encoded, model, scaler, use_scaling, selected_features)
     elif page == "Data Exploration":
-        show_data_exploration(df_new_encoded, model, scaler, use_scaling, selected_features)
+        show_data_exploration(df_new_encoded)
     elif page == "Performance Dashboard":
-        show_Performance_Dashboard(df_new_encoded, model, scaler, use_scaling, selected_features)
+        show_Performance_Dashboard(df_new_encoded)
     
 
 def show_Home(df_new_encoded):
@@ -431,7 +431,7 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
             arrival_month = st.selectbox("Arrival Month",
                                        options=['January', 'February', 'March', 'April', 'May', 'June',
                                                'July', 'August', 'September', 'October', 'November', 'December'])
-            total_nights = st.number_input("Total Nights", value = 0)
+            total_nights = st.number_input("Total Nights", value = 1)
         
         with col2:
             total_guests = st.number_input("Total Guests", value = 1)
