@@ -142,7 +142,7 @@ def train_models(X, y):
         'use_scaling': False
     }
     
-    return results, X_test, y_test, scaler
+    return results
 
 def prepare_input_features(input_data, feature_names, scaler=None, use_scaling=False):
     input_df = pd.DataFrame([input_data])
@@ -184,6 +184,11 @@ def main():
 
     X = df_new_encoded[selected_features]
     y = df_new_encoded['adr']
+    models = train_models(X, y)
+        best_model_name = max(models, key=lambda m: models[m]['r2'])
+        model = models[best_model_name]['model']
+        scaler = models[best_model_name]['scaler']
+        use_scaling = models[best_model_name]['use_scaling']
                         
     if page == "Home":
         show_Home(df_new_encoded)
