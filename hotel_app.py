@@ -121,7 +121,7 @@ def train_models(X, y):
         'rmse': rmse_lr,
         'r2': r2_lr,
         'predictions': y_pred_linear_regression,
-        'use_scaling': True
+        'use_scaling': True,
         'scaler': scaler
     }
     
@@ -140,7 +140,7 @@ def train_models(X, y):
         'rmse': rmse_rf,
         'r2': r2_rf,
         'predictions': y_pred_random_forest,
-        'use_scaling': False
+        'use_scaling': False,
         'scaler': None
     }
     
