@@ -179,10 +179,10 @@ def main():
     
     data = load_data()
     
-            selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
+        selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
                            'total_of_special_requests', 'total_guests', 'total_nights']
 
-            X = df_new_processed[feature_cols]
+            X = df_new_processed[selected_features]
             y = df_new_processed['adr']
             
             models, best_name, scaler, X_test, y_test = train_simple_models(X, y)
