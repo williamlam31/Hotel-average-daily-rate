@@ -21,39 +21,19 @@ st.markdown("""
     font-size: 2.5rem;
     color: #1f4e79;
     text-align: center;
-    margin-bottom: 1rem;
 }
 .stButton > button {
     background-color: #2196f3;
     color: white;
-    border-radius: 0.5rem;
-    border: none;
-    padding: 0.5rem 1rem;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize session state
-if 'model_trained' not in st.session_state:
-    st.session_state.model_trained = False
-if 'model' not in st.session_state:
-    st.session_state.model = None
-if 'scaler' not in st.session_state:
-    st.session_state.scaler = None
-if 'feature_names' not in st.session_state:
-    st.session_state.feature_names = None
-if 'model_results' not in st.session_state:
-    st.session_state.model_results = None
-if 'best_model_name' not in st.session_state:
-    st.session_state.best_model_name = None
-if 'best_model' not in st.session_state:
-    st.session_state.best_model = None
-if 'use_scaling' not in st.session_state:
-    st.session_state.use_scaling = None
-if 'X_test' not in st.session_state:
-    st.session_state.X_test = None
-if 'y_test' not in st.session_state:
-    st.session_state.y_test = None
+if 'models_trained' not in st.session_state:
+    st.session_state.models_trained = False
+if 'current_page' not in st.session_state:
+    st.session_state.current_page = "Home"
+
 
 @st.cache_data
 def load_and_preprocess_data():
