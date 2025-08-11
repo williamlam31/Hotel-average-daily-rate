@@ -545,7 +545,6 @@ def show_Performance_Dashboard(data):
             correlations[feature] = corr
     corr_df = pd.DataFrame(list(correlations.items()), columns=['Feature', 'Correlation with ADR'])
     corr_df = corr_df.sort_values('Correlation with ADR', key=abs, ascending=False)
-    corr_df['Feature_Display'] = corr_df['Feature'].map(feature_display_names)
 
     feature_display_names = {
         'lead_time': 'Lead Time',
@@ -555,7 +554,8 @@ def show_Performance_Dashboard(data):
         'days_in_waiting_list': 'Days in Waiting List',
         'arrival_month_numeric': 'Arrival Month'
     }
-     
+
+    corr_df['Feature_Display'] = corr_df['Feature'].map(feature_display_names)
 
     st.write("**Feature Summary:**")
     for idx, row in corr_df.head(3).iterrows():
