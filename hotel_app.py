@@ -182,22 +182,9 @@ def main():
     selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
                            'total_of_special_requests', 'total_guests', 'total_nights']
 
-            X = df_new_processed[selected_features]
-            y = df_new_processed['adr']
-            
-            models, best_name, scaler, X_test, y_test = train_simple_models(X, y)
-            
-      
-            st.session_state.models = models
-            st.session_state.best_model = best_name
-            st.session_state.scaler = scaler
-            st.session_state.feature_names = feature_cols
-            st.session_state.X_test = X_test
-            st.session_state.y_test = y_test
-            st.session_state.models_trained = True
-
-        page = st.session_state.current_page
-    
+    X = df_new_processed[selected_features]
+    y = df_new_processed['adr']
+                        
     if page == "Home":
         show_Home(data)
     elif page == "Average Daily Rate":
