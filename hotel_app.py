@@ -215,7 +215,7 @@ def main():
     elif page == "Data Exploration":
         show_data_exploration(data)
     elif page == "Performance Dashboard":
-        show_performance_dashboard()
+        show_Performance_Dashboard()
     
 
 def show_Home(data):
