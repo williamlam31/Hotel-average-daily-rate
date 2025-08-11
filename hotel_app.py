@@ -492,7 +492,7 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
             st.error(f"Error making prediction: {str(e)}")
 
 def show_Performance_Dashboard(data):
-    st.markdown('<h1 class="main-header">📈 Performance Dashboard</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Performance Dashboard</h1>', unsafe_allow_html=True)
 
     
 
@@ -500,7 +500,7 @@ def show_Performance_Dashboard(data):
                    'total_of_special_requests', 'days_in_waiting_list', 'arrival_month_numeric']
     
 
-    st.write("### Pricing Patterns")
+    st.write("### Pricing Summary")
     
 
     col1, col2, col3, col4 = st.columns(4)
@@ -521,21 +521,21 @@ def show_Performance_Dashboard(data):
         st.metric("Peak ADR", f"${max_adr:.2f}")
     
 
-    st.write("**Seasonal Pricing:**")
+    st.write("**Seasonal Overview:**")
     monthly_adr = data.groupby('arrival_date_month')['adr'].mean().round(2)
     
     peak_season = monthly_adr.idxmax()
-    low_season = monthly_adr.idxmin()
+    slow_season = monthly_adr.idxmin()
     
     col1, col2 = st.columns(2)
     with col1:
-        st.info(f"🔥 **Peak Season**: {peak_season} (${monthly_adr[peak_season]:.2f} avg)")
+        st.info(f"**Peak Season**: {peak_season} (${monthly_adr[peak_season]:.2f} avg)")
     
     with col2:
-        st.info(f"❄️ **Low Season**: {low_season} (${monthly_adr[low_season]:.2f} avg)")
+        st.info(f"**Slow Season**: {low_season} (${monthly_adr[low_season]:.2f} avg)")
     
 
-    st.write("###  Feature Impact Analysis")
+    st.write("###  Feature Correlation")
     
 
     correlations = {}
@@ -555,26 +555,18 @@ def show_Performance_Dashboard(data):
         'days_in_waiting_list': 'Days in Waiting List',
         'arrival_month_numeric': 'Arrival Month'
     }
-    
-    corr_df['Feature_Display'] = corr_df['Feature'].map(feature_display_names)
-    
-    fig_corr = px.bar(corr_df, x='Correlation with ADR', y='Feature_Display',
-                     orientation='h',
-                     title='Feature Correlation with Average Daily Rate',
-                     color='Correlation with ADR',
-                     color_continuous_scale='RdBu_r')
-    st.plotly_chart(fig_corr, use_container_width=True)   
-    # Feature importance insights
-    st.write("**Top Predictive Features:**")
+     
+
+    st.write("**Feature Summary:**")
     for idx, row in corr_df.head(3).iterrows():
         correlation_strength = "Strong" if abs(row['Correlation with ADR']) > 0.5 else "Moderate" if abs(row['Correlation with ADR']) > 0.3 else "Weak"
         direction = "Positive" if row['Correlation with ADR'] > 0 else "Negative"
         st.write(f"• **{row['Feature_Display']}**: {correlation_strength} {direction.lower()} correlation ({row['Correlation with ADR']:.3f})")
     
-    # SECTION 3: Business Intelligence
+
     st.write("### Business Intelligence")
     
-    # Lead time insights
+
     avg_lead_time = data['lead_time'].mean()
     high_lead_time_adr = data[data['lead_time'] > avg_lead_time]['adr'].mean()
     low_lead_time_adr = data[data['lead_time'] <= avg_lead_time]['adr'].mean()
@@ -584,7 +576,7 @@ def show_Performance_Dashboard(data):
     st.write(f"• High lead time bookings (>{avg_lead_time:.0f} days): ${high_lead_time_adr:.2f} avg ADR")
     st.write(f"• Low lead time bookings (≤{avg_lead_time:.0f} days): ${low_lead_time_adr:.2f} avg ADR")
     
-    # Guest composition insights
+
     st.write(" **Guest Composition:**")
     avg_guests = data['total_guests'].mean()
     avg_nights = data['total_nights'].mean()
@@ -592,7 +584,6 @@ def show_Performance_Dashboard(data):
     st.write(f"• Average party size: {avg_guests:.1f} guests")
     st.write(f"• Average stay duration: {avg_nights:.1f} nights")
     
-    # Special requests impact
     special_req_correlation = data['total_of_special_requests'].corr(data['adr'])
     st.write("**Service Level:**")
     st.write(f"• Special requests correlation with ADR: {special_req_correlation:.3f}")
