@@ -434,7 +434,7 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
             total_nights = st.number_input("Total Nights", value = 0)
         
         with col2:
-            total_guests = st.number_input("Total Guests", value = 0)
+            total_guests = st.number_input("Total Guests", value = 1)
             days_waiting = st.number_input("Days in Waiting List", value = 0)
         with col3:
             special_requests = st.number_input("Total of Special Requests", value = 0)
