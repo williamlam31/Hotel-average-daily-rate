@@ -555,7 +555,7 @@ def show_Performance_Dashboard(data):
 
     corr_df['Feature_Display'] = corr_df['Feature'].map(feature_display_names)
 
-    st.write("**Feature Summary:**")
+    st.write("##Feature Summary")
     for idx, row in corr_df.head(3).iterrows():
         correlation_strength = "Strong" if abs(row['Correlation with ADR']) > 0.5 else "Moderate" if abs(row['Correlation with ADR']) > 0.3 else "Weak"
         direction = "Positive" if row['Correlation with ADR'] > 0 else "Negative"
@@ -566,13 +566,13 @@ def show_Performance_Dashboard(data):
     high_lead_time_adr = data[data['lead_time'] > avg_lead_time]['adr'].mean()
     low_lead_time_adr = data[data['lead_time'] <= avg_lead_time]['adr'].mean()
     
-    st.write("###Booking Lead Time:###")
+    st.write("##Booking Lead Time")
     st.write(f"• Average lead time: {avg_lead_time:.0f} days")
     st.write(f"• High lead time bookings (>{avg_lead_time:.0f} days): ${high_lead_time_adr:.2f} avg ADR")
     st.write(f"• Low lead time bookings (≤{avg_lead_time:.0f} days): ${low_lead_time_adr:.2f} avg ADR")
     
 
-    st.write(" ###Party Size:###")
+    st.write("##Party Size")
     avg_guests = data['total_guests'].mean()
     avg_nights = data['total_nights'].mean()
     
