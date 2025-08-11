@@ -179,19 +179,9 @@ def main():
     
     data = load_data()
     
-    if not st.session_state.models_trained:
-        with st.spinner("Training models..."):
-
             selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
                            'total_of_special_requests', 'total_guests', 'total_nights']
-            
 
-            Q1 = data['adr'].quantile(0.25)
-            Q3 = data['adr'].quantile(0.75)
-            IQR = Q3 - Q1
-            mask = (data['adr'] >= Q1 - 1.5 * IQR) & (data['adr'] <= Q3 + 1.5 * IQR)
-            df_new_processed = data[mask]
-            
             X = df_new_processed[feature_cols]
             y = df_new_processed['adr']
             
