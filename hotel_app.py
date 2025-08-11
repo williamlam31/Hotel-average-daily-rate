@@ -534,8 +534,6 @@ def show_Performance_Dashboard(data):
     with col2:
         st.info(f"**Slow Season**: {slow_season} (${monthly_adr[slow_season]:.2f} avg)")
     
-
-    st.write("###  Feature Correlation")
     
 
     correlations = {}
@@ -564,33 +562,22 @@ def show_Performance_Dashboard(data):
         st.write(f"• **{row['Feature_Display']}**: {correlation_strength} {direction.lower()} correlation ({row['Correlation with ADR']:.3f})")
     
 
-    st.write("### Business Intelligence")
-    
-
     avg_lead_time = data['lead_time'].mean()
     high_lead_time_adr = data[data['lead_time'] > avg_lead_time]['adr'].mean()
     low_lead_time_adr = data[data['lead_time'] <= avg_lead_time]['adr'].mean()
     
-    st.write("**Booking Behavior:**")
+    st.write("**Booking Lead Time:**")
     st.write(f"• Average lead time: {avg_lead_time:.0f} days")
     st.write(f"• High lead time bookings (>{avg_lead_time:.0f} days): ${high_lead_time_adr:.2f} avg ADR")
     st.write(f"• Low lead time bookings (≤{avg_lead_time:.0f} days): ${low_lead_time_adr:.2f} avg ADR")
     
 
-    st.write(" **Guest Composition:**")
+    st.write(" **Party Size:**")
     avg_guests = data['total_guests'].mean()
     avg_nights = data['total_nights'].mean()
     
     st.write(f"• Average party size: {avg_guests:.1f} guests")
     st.write(f"• Average stay duration: {avg_nights:.1f} nights")
-    
-    special_req_correlation = data['total_of_special_requests'].corr(data['adr'])
-    st.write("**Service Level:**")
-    st.write(f"• Special requests correlation with ADR: {special_req_correlation:.3f}")
-    if special_req_correlation > 0:
-        st.write("• Higher service requests typically associated with higher rates")
-    else:
-        st.write("• Special requests show minimal impact on pricing")
     
     
             
