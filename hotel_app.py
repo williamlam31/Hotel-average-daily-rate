@@ -453,10 +453,7 @@ def show_Average_Daily_Rate(data):
                 'total_nights': total_nights,
                 'days_in_waiting_list': days_waiting,
             }
-            
-            model = st.session_state.best_model
-            prediction = model.predict(input_prepared)[0]
-            
+       
             # Display prediction
             st.markdown(f"""
             <div style="background-color: #ffffff; color: #000000; padding: 2rem; border-radius: 1rem; border-left: 5px solid #2196f3; margin: 1rem 0;">
