@@ -213,9 +213,9 @@ def main():
     elif page == "Average Daily Rate":
         show_Average_Daily_Rate(data)
     elif page == "Data Overview":
-        show_Data_Overview(data)
+        show_data_overview(data)
     elif page == "Performance":
-        show_Performance()
+        show_performance()
     
 
 def show_Home(data):
