@@ -532,7 +532,7 @@ def show_Performance_Dashboard(data):
         st.info(f"**Peak Season**: {peak_season} (${monthly_adr[peak_season]:.2f} avg)")
     
     with col2:
-        st.info(f"**Slow Season**: {slow_season} (${monthly_adr[low_season]:.2f} avg)")
+        st.info(f"**Slow Season**: {slow_season} (${monthly_adr[slow_season]:.2f} avg)")
     
 
     st.write("###  Feature Correlation")
