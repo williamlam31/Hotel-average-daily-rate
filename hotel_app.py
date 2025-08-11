@@ -171,7 +171,7 @@ def main():
     if st.sidebar.button("Average Daily Rate"):
         st.session_state.current_page = "Average Daily Rate"
     if st.sidebar.button("Data Exploration"):
-        st.session_state.current_page = "Data" Exploration
+        st.session_state.current_page = "Data Exploration"
     if st.sidebar.button("Performance Dashboard"):
         st.session_state.current_page = "Performance Dashboard"
     
