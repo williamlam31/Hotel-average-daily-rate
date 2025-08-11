@@ -81,7 +81,7 @@ def load_data():
     # One-Hot Encoding
     categorical_features = ['hotel', 'meal', 'country', 'market_segment', 'distribution_channel',
                                'reserved_room_type', 'assigned_room_type', 'deposit_type', 'customer_type', 
-                               'arrival_season', 'arrival_date_month', 'reservation_status']
+                               'arrival_season', 'reservation_status']
     
     df_new_encoded = pd.get_dummies(df_new, columns=categorical_features, drop_first=True)
 
