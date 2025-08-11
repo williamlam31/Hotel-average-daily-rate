@@ -545,7 +545,7 @@ def show_Performance_Dashboard(data):
             correlations[feature] = corr
     corr_df = pd.DataFrame(list(correlations.items()), columns=['Feature', 'Correlation with ADR'])
     corr_df = corr_df.sort_values('Correlation with ADR', key=abs, ascending=False)
-    
+    corr_df['Feature_Display'] = corr_df['Feature'].map(feature_display_names)
 
     feature_display_names = {
         'lead_time': 'Lead Time',
