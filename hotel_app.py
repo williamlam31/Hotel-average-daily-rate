@@ -11,6 +11,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import warnings
 import random
 
+# ---- Random seeds for reproducibility ----
 random.seed(42)
 np.random.seed(42)
 
@@ -48,27 +49,28 @@ def load_data():
     df = kagglehub.load_dataset(
         KaggleDatasetAdapter.PANDAS,
         "jessemostipak/hotel-booking-demand",
-        "hotel_bookings.csv")
+        "hotel_bookings.csv"
+    )
     
     df_new = df.copy()
 
-    #Replacing Null values with 0 for numerical and Unknown for Categorical
+    # Replace Nulls / clean
     df_new['children'].fillna(0, inplace=True)
     df_new['country'].fillna('Unknown', inplace=True)
-
-    #Dropping Duplicates
-    df_new.drop_duplicates(inplace = True)
+    df_new.drop_duplicates(inplace=True)
     df_new.drop(['agent', 'company'], axis=1, inplace=True)
     df_new['reservation_status_date'] = df_new['reservation_status_date'].astype(str)
-    df_new.drop_duplicates(inplace = True)
+    df_new.drop_duplicates(inplace=True)
 
-    #New Features
+    # New Features
     df_new['total_nights'] = df_new['stays_in_weekend_nights'] + df_new['stays_in_week_nights']
     df_new['total_guests'] = df_new['adults'] + df_new['children'] + df_new['babies']
     
     # Month Mapping
-    month_assignment = {'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
-                       'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12}
+    month_assignment = {
+        'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
+        'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
+    }
     df_new['arrival_month_numeric'] = df_new['arrival_date_month'].map(month_assignment)
     
     def get_season(month):
@@ -83,17 +85,19 @@ def load_data():
     
     df_new['arrival_season'] = df_new['arrival_month_numeric'].apply(get_season)
     
-    # One-Hot Encoding
-    categorical_features = ['hotel', 'meal', 'country', 'market_segment', 'distribution_channel',
-                               'reserved_room_type', 'assigned_room_type', 'deposit_type', 'customer_type', 
-                               'arrival_season', 'reservation_status']
-    
+    # One-Hot Encoding for modeling
+    categorical_features = [
+        'hotel', 'meal', 'country', 'market_segment', 'distribution_channel',
+        'reserved_room_type', 'assigned_room_type', 'deposit_type', 'customer_type', 
+        'arrival_season', 'reservation_status'
+    ]
     df_new_encoded = pd.get_dummies(df_new, columns=categorical_features, drop_first=True)
 
-    return df_new_encoded
+    # Return BOTH: raw (with arrival_date_month intact) and encoded (for ML)
+    return df_new, df_new_encoded
 
 def train_models(X, y):
-    # Single, seeded split reused for all models/charts
+    # Single, seeded split reused for all models
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
@@ -105,7 +109,7 @@ def train_models(X, y):
     
     results = {}
     
-    # Linear Regression
+    # ---- Linear Regression ----
     linear_regression = LinearRegression()
     linear_regression.fit(X_train_scaled, y_train) 
     y_pred_lr_train = linear_regression.predict(X_train_scaled)
@@ -115,12 +119,12 @@ def train_models(X, y):
         'model': linear_regression,
         'use_scaling': True,
         'scaler': scaler,
-
+        # keep original test metrics fields
         'mae': mean_absolute_error(y_test, y_pred_lr_test),
         'rmse': np.sqrt(mean_squared_error(y_test, y_pred_lr_test)),
         'r2': r2_score(y_test, y_pred_lr_test),
         'predictions': y_pred_lr_test,
-
+        # full train/test metrics for the table
         'metrics': {
             'train': {
                 'MAE': mean_absolute_error(y_train, y_pred_lr_train),
@@ -135,7 +139,7 @@ def train_models(X, y):
         }
     }
     
-    # Random Forest
+    # ---- Random Forest ----
     random_forest = RandomForestRegressor(n_estimators=150, random_state=42, n_jobs=-1)
     random_forest.fit(X_train, y_train) 
     y_pred_rf_train = random_forest.predict(X_train)
@@ -145,12 +149,12 @@ def train_models(X, y):
         'model': random_forest,
         'use_scaling': False,
         'scaler': None,
-
+        # keep original test metrics fields
         'mae': mean_absolute_error(y_test, y_pred_rf_test),
         'rmse': np.sqrt(mean_squared_error(y_test, y_pred_rf_test)),
         'r2': r2_score(y_test, y_pred_rf_test),
         'predictions': y_pred_rf_test,
- 
+        # full train/test metrics for the table
         'metrics': {
             'train': {
                 'MAE': mean_absolute_error(y_train, y_pred_rf_train),
@@ -188,7 +192,6 @@ def get_season(month):
         return 'Fall'
         
 def main():
-    
     if st.sidebar.button("Home"):
         st.session_state.current_page = "Home"
     if st.sidebar.button("Average Daily Rate"):
@@ -200,10 +203,14 @@ def main():
     
     page = st.session_state.current_page
     
-    df_new_encoded = load_data()
+    # Get both raw and encoded data
+    raw_df, df_new_encoded = load_data()
     
-    selected_features = ['lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
-                           'total_of_special_requests', 'total_guests', 'total_nights']
+    # Features for modeling (encoded frame)
+    selected_features = [
+        'lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
+        'total_of_special_requests', 'total_guests', 'total_nights'
+    ]
 
     X = df_new_encoded[selected_features]
     y = df_new_encoded['adr']
@@ -214,100 +221,99 @@ def main():
     use_scaling = models[chosen_model]['use_scaling']
                         
     if page == "Home":
-        show_Home(df_new_encoded)
+        show_Home(raw_df)
     elif page == "Average Daily Rate":
-        show_Average_Daily_Rate(df_new_encoded, model, scaler, use_scaling, selected_features)
+        # Use raw_df for avg_adr/reference; model uses encoded features internally
+        show_Average_Daily_Rate(raw_df, model, scaler, use_scaling, selected_features)
     elif page == "Data Exploration":
-        show_data_exploration(df_new_encoded, models)
+        # Use raw_df so arrival_date_month exists for charts
+        show_data_exploration(raw_df, models)
     elif page == "Performance Dashboard":
-        show_Performance_Dashboard(df_new_encoded)
+        # Use raw_df for groupby on arrival_date_month, etc.
+        show_Performance_Dashboard(raw_df)
     
 
 def show_Home(df_new_encoded):
-    
     st.markdown('<h1 class="main-header"> Hotel Average Daily Rate</h1>', unsafe_allow_html=True)
-
-    
     st.markdown("""
     ### Business Problem
     
-    Hotel prices are dyanmic and influenced by factors such as lead time and seasonality. Since the hospitality industry is very competitive, this AI tool is 
+    Hotel prices are dynamic and influenced by factors such as lead time and seasonality. Since the hospitality industry is very competitive, this AI tool is 
     to assist the hotel in determining an optimal rate that will attract guests and improve their financial outlook.
     
     ### Explanation of Side Pages
     
     - **Average Daily Rate**: Average Daily Rate estimate
-    - **Performance Dashboard**: Key metrics and visualiztions
+    - **Performance Dashboard**: Key metrics and visualizations
     - **Data Exploration**: Key insights from analysis
     """)
 
 def show_data_exploration(data, models=None):
-
     st.markdown('<h1 class="main-header"> Data Exploration</h1>', unsafe_allow_html=True)
 
+    # ===== Model Performance table (Train/Test), appears first =====
     if models is not None:
         rows = []
         for model_name, info in models.items():
             rows.append({'Model': model_name, 'Split': 'Train', **info['metrics']['train']})
             rows.append({'Model': model_name, 'Split': 'Test', **info['metrics']['test']})
-        metrics_df = pd.DataFrame(rows, columns=['Model','Split','MAE','RMSE','R²'])
+        metrics_df = pd.DataFrame(rows, columns=['Model', 'Split', 'MAE', 'RMSE', 'R²'])
         st.subheader("Model Performance (Train/Test)")
         st.dataframe(
             metrics_df.style.format({'MAE': '{:.2f}', 'RMSE': '{:.2f}', 'R²': '{:.3f}'}),
             use_container_width=True,
-            hide_index=True  
+            hide_index=True  # no left index
         )
 
-    # Average Daily Rate (ADR) by Month
-st.subheader("Average Daily Rate (ADR) by Month")
-month_order = ['January', 'February', 'March', 'April', 'May', 'June',
-               'July', 'August', 'September', 'October', 'November', 'December']
-adr_by_month = data.groupby('arrival_date_month')['adr'].agg(['mean', 'std']).reset_index()
-adr_by_month['arrival_date_month'] = pd.Categorical(adr_by_month['arrival_date_month'], 
-                                                    categories=month_order, 
-                                                    ordered=True)
-adr_by_month = adr_by_month.sort_values('arrival_date_month')
-
-fig_month = go.Figure()
-fig_month.add_trace(go.Scatter(
-    x=adr_by_month['arrival_date_month'],
-    y=adr_by_month['mean'],
-    mode='lines+markers',
-    name='Average ADR',
-    line=dict(color='#2196F3', width=3),
-    marker=dict(size=8)
-))
-fig_month.update_layout(
-    title='Average Daily Rate by Month',
-    xaxis_title='Month',
-    yaxis_title='ADR ($)',
-    hovermode='x unified',
-    template='plotly_white'
-)
-st.plotly_chart(fig_month, use_container_width=True)
-
-col1, col2 = st.columns(2)
-with col1:
-    peak_month = adr_by_month.loc[adr_by_month['mean'].idxmax(), 'arrival_date_month']
-    peak_adr = adr_by_month['mean'].max()
-    st.metric("Peak Month", peak_month, f"${peak_adr}")
-with col2:
-    low_month = adr_by_month.loc[adr_by_month['mean'].idxmin(), 'arrival_date_month']
-    low_adr = adr_by_month['mean'].min()
-    st.metric("Lowest Month", low_month, f"${low_adr:.2f}")
-
-    # Lead Time and ADR by Month
-    st.subheader("Lead Time and ADR by Month")
+    # ===== Average Daily Rate (ADR) by Month (median removed) =====
+    st.subheader("Average Daily Rate (ADR) by Month")
     month_order = ['January', 'February', 'March', 'April', 'May', 'June',
                    'July', 'August', 'September', 'October', 'November', 'December']
+    adr_by_month = data.groupby('arrival_date_month')['adr'].agg(['mean', 'std']).reset_index()
+    adr_by_month['arrival_date_month'] = pd.Categorical(
+        adr_by_month['arrival_date_month'], categories=month_order, ordered=True
+    )
+    adr_by_month = adr_by_month.sort_values('arrival_date_month')
+
+    fig_month = go.Figure()
+    fig_month.add_trace(go.Scatter(
+        x=adr_by_month['arrival_date_month'],
+        y=adr_by_month['mean'],
+        mode='lines+markers',
+        name='Average ADR',
+        line=dict(color='#2196F3', width=3),
+        marker=dict(size=8)
+    ))
+    fig_month.update_layout(
+        title='Average Daily Rate by Month',
+        xaxis_title='Month',
+        yaxis_title='ADR ($)',
+        hovermode='x unified',
+        template='plotly_white'
+    )
+    st.plotly_chart(fig_month, use_container_width=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        peak_month = adr_by_month.loc[adr_by_month['mean'].idxmax(), 'arrival_date_month']
+        peak_adr = adr_by_month['mean'].max()
+        st.metric("Peak Month", peak_month, f"${peak_adr}")
+    with col2:
+        low_month = adr_by_month.loc[adr_by_month['mean'].idxmin(), 'arrival_date_month']
+        low_adr = adr_by_month['mean'].min()
+        st.metric("Lowest Month", low_month, f"${low_adr:.2f}")
+
+    # ===== Lead Time and ADR by Month (dual-axis) =====
+    st.subheader("Lead Time and ADR by Month")
     monthly_stats = data.groupby('arrival_date_month').agg({
         'lead_time': 'mean',
         'adr': 'mean'
     }).reset_index()
-    monthly_stats['arrival_date_month'] = pd.Categorical(monthly_stats['arrival_date_month'], 
-                                                        categories=month_order, 
-                                                        ordered=True)
+    monthly_stats['arrival_date_month'] = pd.Categorical(
+        monthly_stats['arrival_date_month'], categories=month_order, ordered=True
+    )
     monthly_stats = monthly_stats.sort_values('arrival_date_month')
+
     fig_dual = go.Figure()
     fig_dual.add_trace(go.Bar(
         x=monthly_stats['arrival_date_month'],
@@ -366,7 +372,7 @@ with col2:
         highest_lead_month = lead_by_month.idxmax()
         st.metric("Highest Lead Time Month", highest_lead_month)
 
-    # Feature Correlations heatmap
+    # ===== Feature Correlations heatmap =====
     st.subheader("Feature Correlations")
     selected_features = [
         'lead_time', 'total_nights', 'total_guests', 
@@ -550,5 +556,6 @@ def show_Performance_Dashboard(data):
     st.write(f"• Average stay duration: {avg_nights:.1f} nights")
     
     
+# Run the main function
 if __name__ == "__main__":
     main()
