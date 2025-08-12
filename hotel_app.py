@@ -11,7 +11,6 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import warnings
 import random
 
-# ---- Random seeds for reproducibility ----
 random.seed(42)
 np.random.seed(42)
 
@@ -93,11 +92,10 @@ def load_data():
     ]
     df_new_encoded = pd.get_dummies(df_new, columns=categorical_features, drop_first=True)
 
-    # Return BOTH: raw (with arrival_date_month intact) and encoded (for ML)
     return df_new, df_new_encoded
 
 def train_models(X, y):
-    # Single, seeded split reused for all models
+
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
@@ -109,7 +107,7 @@ def train_models(X, y):
     
     results = {}
     
-    # ---- Linear Regression ----
+    #Linear Regression
     linear_regression = LinearRegression()
     linear_regression.fit(X_train_scaled, y_train) 
     y_pred_lr_train = linear_regression.predict(X_train_scaled)
@@ -119,12 +117,12 @@ def train_models(X, y):
         'model': linear_regression,
         'use_scaling': True,
         'scaler': scaler,
-        # keep original test metrics fields
+
         'mae': mean_absolute_error(y_test, y_pred_lr_test),
         'rmse': np.sqrt(mean_squared_error(y_test, y_pred_lr_test)),
         'r2': r2_score(y_test, y_pred_lr_test),
         'predictions': y_pred_lr_test,
-        # full train/test metrics for the table
+
         'metrics': {
             'train': {
                 'MAE': mean_absolute_error(y_train, y_pred_lr_train),
@@ -139,7 +137,7 @@ def train_models(X, y):
         }
     }
     
-    # ---- Random Forest ----
+    # Random Forest
     random_forest = RandomForestRegressor(n_estimators=150, random_state=42, n_jobs=-1)
     random_forest.fit(X_train, y_train) 
     y_pred_rf_train = random_forest.predict(X_train)
@@ -149,12 +147,12 @@ def train_models(X, y):
         'model': random_forest,
         'use_scaling': False,
         'scaler': None,
-        # keep original test metrics fields
+
         'mae': mean_absolute_error(y_test, y_pred_rf_test),
         'rmse': np.sqrt(mean_squared_error(y_test, y_pred_rf_test)),
         'r2': r2_score(y_test, y_pred_rf_test),
         'predictions': y_pred_rf_test,
-        # full train/test metrics for the table
+
         'metrics': {
             'train': {
                 'MAE': mean_absolute_error(y_train, y_pred_rf_train),
@@ -203,10 +201,10 @@ def main():
     
     page = st.session_state.current_page
     
-    # Get both raw and encoded data
+
     raw_df, df_new_encoded = load_data()
     
-    # Features for modeling (encoded frame)
+
     selected_features = [
         'lead_time', 'arrival_month_numeric', 'days_in_waiting_list', 
         'total_of_special_requests', 'total_guests', 'total_nights'
@@ -223,13 +221,13 @@ def main():
     if page == "Home":
         show_Home(raw_df)
     elif page == "Average Daily Rate":
-        # Use raw_df for avg_adr/reference; model uses encoded features internally
+        
         show_Average_Daily_Rate(raw_df, model, scaler, use_scaling, selected_features)
     elif page == "Data Exploration":
-        # Use raw_df so arrival_date_month exists for charts
+
         show_data_exploration(raw_df, models)
     elif page == "Performance Dashboard":
-        # Use raw_df for groupby on arrival_date_month, etc.
+
         show_Performance_Dashboard(raw_df)
     
 
@@ -251,7 +249,7 @@ def show_Home(df_new_encoded):
 def show_data_exploration(data, models=None):
     st.markdown('<h1 class="main-header"> Data Exploration</h1>', unsafe_allow_html=True)
 
-    # ===== Model Performance table (Train/Test), appears first =====
+ 
     if models is not None:
         rows = []
         for model_name, info in models.items():
@@ -265,7 +263,7 @@ def show_data_exploration(data, models=None):
             hide_index=True  # no left index
         )
 
-    # ===== Average Daily Rate (ADR) by Month (median removed) =====
+
     st.subheader("Average Daily Rate (ADR) by Month")
     month_order = ['January', 'February', 'March', 'April', 'May', 'June',
                    'July', 'August', 'September', 'October', 'November', 'December']
@@ -372,7 +370,7 @@ def show_data_exploration(data, models=None):
         highest_lead_month = lead_by_month.idxmax()
         st.metric("Highest Lead Time Month", highest_lead_month)
 
-    # ===== Feature Correlations heatmap =====
+
     st.subheader("Feature Correlations")
     selected_features = [
         'lead_time', 'total_nights', 'total_guests', 
@@ -555,7 +553,6 @@ def show_Performance_Dashboard(data):
     st.write(f"• Average party size: {avg_guests:.1f} guests")
     st.write(f"• Average stay duration: {avg_nights:.1f} nights")
     
-    
-# Run the main function
+
 if __name__ == "__main__":
     main()
