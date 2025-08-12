@@ -445,8 +445,8 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
             prediction = model.predict(input_processed)[0]
             
             st.markdown(f"""
-                <h3 style="color: #000000;"> Estimated Average Daily Rate</h3>
-                <h2 style="color: #000000; font-size: 3rem;">${prediction:.2f}</h2>
+                <h3 style="color: #ffffff;"> Estimated Average Daily Rate</h3>
+                <h2 style="color: #ffffff; font-size: 3rem;">${prediction:.2f}</h2>
        
             """, unsafe_allow_html=True)
             
