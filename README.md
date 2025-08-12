@@ -1,4 +1,4 @@
-# Hotel-average-daily-rate
+# Hotel Average Daily Rate Estimator
 
 ### Business Case
 
