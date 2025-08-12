@@ -10,9 +10,26 @@ and allow the hotel to remain comepetitive.
 
 https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand
 
-### Link to Streamlit
+### Set Up (if user wants to host on their own streamlit)
 
-https://hotel-average-daily-rate-zxbib2hz4pnax78p7lwwkt.streamlit.app/ (Python Version 3.11)
+Download the requirements.txt & hotel_app.py files
+
+Go to https://streamlit.io/ and click "free" at the top
+
+
+### Streamlit Link
+
+Link: https://hotel-average-daily-rate-zxbib2hz4pnax78p7lwwkt.streamlit.app/ (Python Version 3.11)
+
+### Streamlit Navigation
+
+Home Page: Provides a summary page similar to the one in this ReadME
+
+Average Daily Rate: This is where the user will input values
+
+Data Exploration: There are tables and charts to displayed to visualize the data
+
+Performance Dashboard: Includes insights
 
 
 
