@@ -91,7 +91,7 @@ def load_data():
         'days_in_waiting_list', 'total_of_special_requests', 'total_guests', 'total_nights']
     
    
-    X = df_new[numerical_features]
+    X = df_new_encoded[numerical_features]
     y = df_new_encoded['adr']
     
     return df_new_encoded
