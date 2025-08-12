@@ -10,7 +10,7 @@ and allow the hotel to remain comepetitive.
 
 * https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand
 
-### Set Up (if user wants to host on their own streamlit)
+### Set Up
 
 * Download the requirements.txt & hotel_app.py files
 
