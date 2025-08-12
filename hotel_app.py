@@ -259,48 +259,42 @@ def show_data_exploration(data, models=None):
         )
 
     # Average Daily Rate (ADR) by Month
-    st.subheader("Average Daily Rate (ADR) by Month")
-    month_order = ['January', 'February', 'March', 'April', 'May', 'June',
-                   'July', 'August', 'September', 'October', 'November', 'December']
-    adr_by_month = data.groupby('arrival_date_month')['adr'].agg(['mean', 'median', 'std']).reset_index()
-    adr_by_month['arrival_date_month'] = pd.Categorical(adr_by_month['arrival_date_month'], 
-                                                        categories=month_order, 
-                                                        ordered=True)
-    adr_by_month = adr_by_month.sort_values('arrival_date_month')
-    fig_month = go.Figure()
-    fig_month.add_trace(go.Scatter(
-        x=adr_by_month['arrival_date_month'],
-        y=adr_by_month['mean'],
-        mode='lines+markers',
-        name='Average ADR',
-        line=dict(color='#2196F3', width=3),
-        marker=dict(size=8)
-    ))
-    fig_month.add_trace(go.Scatter(
-        x=adr_by_month['arrival_date_month'],
-        y=adr_by_month['median'],
-        mode='lines+markers',
-        name='Median ADR',
-        line=dict(color='#FF9800', width=2, dash='dash'),
-        marker=dict(size=6)
-    ))
-    fig_month.update_layout(
-        title='Average Daily Rate by Month',
-        xaxis_title='Month',
-        yaxis_title='ADR ($)',
-        hovermode='x unified',
-        template='plotly_white'
-    )
-    st.plotly_chart(fig_month, use_container_width=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        peak_month = adr_by_month.loc[adr_by_month['mean'].idxmax(), 'arrival_date_month']
-        peak_adr = adr_by_month['mean'].max()
-        st.metric("Peak Month", peak_month, f"${peak_adr}")
-    with col2:
-        low_month = adr_by_month.loc[adr_by_month['mean'].idxmin(), 'arrival_date_month']
-        low_adr = adr_by_month['mean'].min()
-        st.metric("Lowest Month", low_month, f"${low_adr:.2f}")
+st.subheader("Average Daily Rate (ADR) by Month")
+month_order = ['January', 'February', 'March', 'April', 'May', 'June',
+               'July', 'August', 'September', 'October', 'November', 'December']
+adr_by_month = data.groupby('arrival_date_month')['adr'].agg(['mean', 'std']).reset_index()
+adr_by_month['arrival_date_month'] = pd.Categorical(adr_by_month['arrival_date_month'], 
+                                                    categories=month_order, 
+                                                    ordered=True)
+adr_by_month = adr_by_month.sort_values('arrival_date_month')
+
+fig_month = go.Figure()
+fig_month.add_trace(go.Scatter(
+    x=adr_by_month['arrival_date_month'],
+    y=adr_by_month['mean'],
+    mode='lines+markers',
+    name='Average ADR',
+    line=dict(color='#2196F3', width=3),
+    marker=dict(size=8)
+))
+fig_month.update_layout(
+    title='Average Daily Rate by Month',
+    xaxis_title='Month',
+    yaxis_title='ADR ($)',
+    hovermode='x unified',
+    template='plotly_white'
+)
+st.plotly_chart(fig_month, use_container_width=True)
+
+col1, col2 = st.columns(2)
+with col1:
+    peak_month = adr_by_month.loc[adr_by_month['mean'].idxmax(), 'arrival_date_month']
+    peak_adr = adr_by_month['mean'].max()
+    st.metric("Peak Month", peak_month, f"${peak_adr}")
+with col2:
+    low_month = adr_by_month.loc[adr_by_month['mean'].idxmin(), 'arrival_date_month']
+    low_adr = adr_by_month['mean'].min()
+    st.metric("Lowest Month", low_month, f"${low_adr:.2f}")
 
     # Lead Time and ADR by Month
     st.subheader("Lead Time and ADR by Month")
