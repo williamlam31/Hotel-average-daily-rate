@@ -12,24 +12,24 @@ and allow the hotel to remain comepetitive.
 
 ### Set Up (if user wants to host on their own streamlit)
 
-Download the requirements.txt & hotel_app.py files
+* Download the requirements.txt & hotel_app.py files
 
 * Go to https://streamlit.io/ and click "free" at the top
 
 
 ### Streamlit Link
 
-Link: https://hotel-average-daily-rate-zxbib2hz4pnax78p7lwwkt.streamlit.app/ (Python Version 3.11)
+* Link: https://hotel-average-daily-rate-zxbib2hz4pnax78p7lwwkt.streamlit.app/ (Python Version 3.11)
 
 ### Streamlit Navigation
 
-Home Page: Provides a summary page similar to the one in this ReadME
+* Home Page: Provides a summary page similar to the one in this ReadME
 
-Average Daily Rate: This is where the user will input values
+* Average Daily Rate: This is where the user will input values
 
-Data Exploration: There are tables and charts to displayed to visualize the data
+* Data Exploration: There are tables and charts to displayed to visualize the data
 
-Performance Dashboard: Includes insights
+* Performance Dashboard: Includes insights
 
 
 
