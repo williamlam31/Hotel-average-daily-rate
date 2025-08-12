@@ -1,15 +1,19 @@
 # Hotel-average-daily-rate
 
-## Project Scope
+## Business Case
 
-This project aims to assist hotels in estimated an average daily rate based on various factors. The factors focused on within this project
-
-'lead_time', 'total_nights', 'total_guests', 'total_of_special_requests', 'arrival_month', 'days_in_waiting_list'
-
+Hotel prices are dynamic and dependent on various factors (ex. seasonality). The hospitality industry is also very competitive
+and this tool to assist hotels in estimating what average daily rate should be established that will attract guests
+and allow them to remain comepetitive.
     
-## Imported Libraries 
+## DataSet
 
+https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand
 
 ## Link to Streamlit
 
-https://hotel-average-daily-rate-zxbib2hz4pnax78p7lwwkt.streamlit.app/
+https://hotel-average-daily-rate-zxbib2hz4pnax78p7lwwkt.streamlit.app/ (Python Version 3.11)
+
+
+
+
