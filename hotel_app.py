@@ -458,7 +458,7 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
             else:
                 st.info("Average")
             
-            col1, col2, col3 = st.columns(3)
+            col1, col2 = st.columns(2)
             
             with col1:
                 st.metric("vs. Average ADR", f"${prediction - avg_adr:.2f}", f"{((prediction/avg_adr - 1) * 100):.1f}%")
@@ -466,10 +466,7 @@ def show_Average_Daily_Rate(data, model, scaler, use_scaling, selected_features)
             with col2:
                 revenue_estimate = prediction * total_nights
                 st.metric("Estimated Revenue", f"${revenue_estimate:.2f}")
-            
-            with col3:
-                revenue_per_guest = revenue_estimate / total_guests if total_guests > 0 else 0
-                st.metric("Revenue per Guest", f"${revenue_per_guest:.2f}")
+
                 
         except Exception as e:
             st.error(f"Error making prediction: {str(e)}")
